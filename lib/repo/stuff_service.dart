@@ -2,8 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:secare/data/stuff_model.dart';
 
 class StuffService{
-  Future uploadNewStuff(StuffModel stuffModel, String day, String todo) async{
-    DocumentReference<Map<String, dynamic>> stuffDocReference = FirebaseFirestore.instance.collection('AllStuffs').doc(day).collection('stuffs').doc(todo);
+  static Future uploadNewStuff(StuffModel stuffModel) async{
+    DocumentReference<Map<String, dynamic>> stuffDocReference = FirebaseFirestore.instance
+        .collection('AllStuffs').doc(stuffModel.day)
+        .collection('stuffs').doc(stuffModel.todo);
+
     final DocumentSnapshot documentSnapshot = await stuffDocReference.get();
 
     if(!documentSnapshot.exists){
@@ -11,9 +14,23 @@ class StuffService{
     }
   }
 
+  static Future updateStuff(StuffModel stuffModel) async{
+    DocumentReference<Map<String, dynamic>> preStuffDocReference = FirebaseFirestore.instance
+        .collection('AllStuffs').doc(stuffModel.day)
+        .collection('stuffs').doc(stuffModel.todo);
 
-  Future<List<StuffModel>> getAllStuffs(String day) async{
-    CollectionReference<Map<String,dynamic>> collectionReference =  FirebaseFirestore.instance.collection('AllStuffs').doc(day).collection('stuffs');
+    final DocumentSnapshot documentSnapshot = await preStuffDocReference.get();
+
+    if(!documentSnapshot.exists){
+      print("not exist");
+    } else await preStuffDocReference.update(stuffModel.toJson());
+  }
+
+//수정과 생성을 나누면?//수정은 바뀐 onCOunt값을?
+
+  static Future<List<StuffModel>> getAllStuffs(String day) async{
+    CollectionReference<Map<String,dynamic>> collectionReference =  FirebaseFirestore.instance
+        .collection('AllStuffs').doc(day).collection('stuffs');
     QuerySnapshot<Map<String, dynamic>> snapshots = await collectionReference.get();
 
     List<StuffModel> products = [];
@@ -25,5 +42,21 @@ class StuffService{
 
     return products;
   }
+
+  static Future<void> deleteStuff(StuffModel stuffModel) async{
+    DocumentReference<Map<String, dynamic>> docReference = FirebaseFirestore.instance
+        .collection('AllStuffs').doc(stuffModel.day)
+        .collection('stuffs').doc(stuffModel.todo);
+
+    final DocumentSnapshot documentSnapshot = await docReference.get();
+
+    if(documentSnapshot.exists){
+      await docReference.delete();
+    } else{
+      print("there is no such data model");
+    }
+
+  } // test this code in home
+
 
 }

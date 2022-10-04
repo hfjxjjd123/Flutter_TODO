@@ -6,6 +6,7 @@ import 'package:secare/screens/day_screen.dart';
 import 'package:secare/screens/splash_screen.dart';
 import 'package:beamer/beamer.dart';
 import 'package:firebase_core/firebase_core.dart';
+import '../const/size.dart';
 
 void main(){
   runApp(SelfCareApp());
@@ -29,6 +30,8 @@ class SelfCareApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SIZE = MediaQuery.of(context).size;
+
     return FutureBuilder(
       future: Firebase.initializeApp(),
       builder: (context, snapshot) {

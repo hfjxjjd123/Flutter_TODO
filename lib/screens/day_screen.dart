@@ -67,7 +67,6 @@ class _DayScreenState extends State<DayScreen> {
       ),
       columnSmallPadding(),
       ...stuffs,
-      UpdateButton(),
     ];
 
     print("모종의 이유로 rebuild 됨");
@@ -98,7 +97,7 @@ class _DayScreenState extends State<DayScreen> {
             columnSmallPadding(),
             Expanded(
               child: FutureBuilder<List<StuffModel>>(
-                future: StuffService().getAllStuffs("2022. 09. 22"),
+                future: StuffService.getAllStuffs("2022. 09. 22"), //수정해
                 builder: (context, snapshot) {
                   for(int i=0;i<snapshot.data!.length;i++){
                       stuffs.add(OnButton(stuff: snapshot.data![i].todo));
