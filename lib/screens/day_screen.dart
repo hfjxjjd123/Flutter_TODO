@@ -1,6 +1,7 @@
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:secare/const/size.dart';
 import 'package:secare/data/stuff_model.dart';
 import 'package:secare/provider/onclick_notifier.dart';
 import 'package:secare/const/colors.dart';
@@ -17,10 +18,6 @@ List<Widget> mainStuffs = [
 ];
 
 List<Widget> stuffs = [
-  OnButton(stuff: '#1',),
-  OnButton(stuff: '#2',),
-  OnButton(stuff: '#3',),
-  OnButton(stuff: '#4',),
 ];
 
 
@@ -46,14 +43,6 @@ class _DayScreenState extends State<DayScreen> {
   @override
   Widget build(BuildContext context) {
     OnclickNotifier onclickNotifier = context.watch<OnclickNotifier>();
-    Size size = MediaQuery.of(context).size;
-    Widget columnBigPadding(){
-      return Container(height: size.height*0.03,);
-    }
-    Widget columnSmallPadding(){
-      return Container(height: size.height*0.01,);
-    }
-    double buttonHeight = size.height*0.1;
 
     List<Widget> allStuffs = [
       ...mainStuffs,
@@ -62,8 +51,8 @@ class _DayScreenState extends State<DayScreen> {
         color: Colors.white,
         height: 1,
         thickness: 1,
-        indent: size.width*0.15,
-        endIndent: size.width*0.15,
+        indent: SIZE.width*0.15,
+        endIndent: SIZE.width*0.15,
       ),
       columnSmallPadding(),
       ...stuffs,
@@ -91,23 +80,24 @@ class _DayScreenState extends State<DayScreen> {
               color: Colors.white,
               height: 1,
               thickness: 1,
-              indent: size.width*0.2,
-              endIndent: size.width*0.2,
+              indent: SIZE.width*0.2,
+              endIndent: SIZE.width*0.2,
             ),
             columnSmallPadding(),
             Expanded(
               child: FutureBuilder<List<StuffModel>>(
                 future: StuffService.getAllStuffs("2022. 09. 22"), //수정해
                 builder: (context, snapshot) {
-                  for(int i=0;i<snapshot.data!.length;i++){
+                  if(snapshot.hasData){
+                    for(int i=0;i<snapshot.data!.length;i++){
                       stuffs.add(OnButton(stuff: snapshot.data![i].todo));
-                  }
-                  return ListView.builder(
-                    itemCount: (allStuffs.length),
-                    itemBuilder: (BuildContext context, int index) {
-                      return InkWell(
+                    }
+                    return ListView.builder(
+                      itemCount: (allStuffs.length),
+                      itemBuilder: (BuildContext context, int index) {
+                        return InkWell(
                           child: Container(child: allStuffs[index], color:(widget.onList[index])?onColor:offColor,),
-                        onTap: (){
+                          onTap: (){
                             if(index == allStuffs.length-1){
 
                             } else if(index<mainStuffs.length || index>mainStuffs.length+2){
@@ -119,10 +109,12 @@ class _DayScreenState extends State<DayScreen> {
                               widget.onList[index] = !widget.onList[index];
                               setState((){});
                             }
-                        },
-                      );
-                    },
-                  );
+                          },
+                        );
+                      },
+                    );
+                  } else return Container(child: Text("Not Yet"),);
+
                 }
               ),
             ),

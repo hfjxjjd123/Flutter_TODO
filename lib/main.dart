@@ -30,8 +30,6 @@ class SelfCareApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SIZE = MediaQuery.of(context).size;
-
     return FutureBuilder(
       future: Firebase.initializeApp(),
       builder: (context, snapshot) {
@@ -54,5 +52,5 @@ class SelfCareApp extends StatelessWidget {
 
 BeamerDelegate _routerDelegate = BeamerDelegate(
   locationBuilder: BeamerLocationBuilder(
-      beamLocations: [DayLocation(),]),
+      beamLocations: [DayLocation(),TestLocation()]),
 );

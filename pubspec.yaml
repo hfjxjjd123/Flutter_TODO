@@ -41,6 +41,7 @@ dependencies:
   firebase_core: ^1.20.0
   cloud_firestore: ^3.4.2
   flutter_expandable_fab: ^1.5.2
+  logger: ^1.1.0
 
 dev_dependencies:
   flutter_test:

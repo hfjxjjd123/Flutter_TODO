@@ -16,7 +16,7 @@ class TestButton extends StatefulWidget {
 }
 
 class _TestButtonState extends State<TestButton> {
-  get isOn => widget.stuffModel.todo;
+  get isOn => widget.stuffModel.isDone;
 
   Widget build(BuildContext context) {
   //버튼 객체의 사이즈를 조절하는 부
