@@ -96,7 +96,20 @@ class _DayScreenState extends State<DayScreen> {
                       itemCount: (allStuffs.length),
                       itemBuilder: (BuildContext context, int index) {
                         return InkWell(
-                          child: Container(child: allStuffs[index], color:(widget.onList[index])?onColor:offColor,),
+                          child: Stack(
+                              children: [
+                                Container(child: allStuffs[index], color:(widget.onList[index])?onColor:offColor,),
+                                Positioned(
+                                  child: Icon(
+                                    Icons.check_circle,
+                                    color: (widget.onList[index])?Colors.white:Colors.transparent,
+                                    size: buttonHeight*0.5,
+                                  ),
+                                  top: buttonHeight*0.25,
+                                  left: buttonHeight*0.3,
+                                )
+                              ]
+                          ),
                           onTap: (){
                             if(index == allStuffs.length-1){
 
@@ -120,18 +133,26 @@ class _DayScreenState extends State<DayScreen> {
             ),
           ],
         ),
-        bottomNavigationBar: DotNavigationBar(
-          items: [
-            DotNavigationBarItem(icon: Icon(Icons.calendar_today_outlined,)),
-            DotNavigationBarItem(icon: Icon(Icons.home_filled,)),
-            DotNavigationBarItem(icon: Icon(Icons.person_pin,)),
+        floatingActionButton: Stack(
+          children: [
+            Align(
+              child: FloatingActionButton(
+                onPressed: () {  },
+                backgroundColor: Color.fromARGB(230, 255, 255, 255),
+                child: Icon(Icons.person, color: offColor,),
+              ),
+              alignment: Alignment(Alignment.bottomLeft.x+0.2 , Alignment.bottomLeft.y)
+            ),
+            Align(
+              child: FloatingActionButton(
+                onPressed: () {  },
+                backgroundColor: Color.fromARGB(230, 255, 255, 255),
+                child: Icon(Icons.add, color: offColor,),
+              ),
+              alignment: Alignment.bottomRight,
+            ),
+
           ],
-          currentIndex: _SelectedTab.values.indexOf(_selectedTab),
-          onTap: _handleIndexChanged,
-          backgroundColor: Color.fromARGB(255, 43, 52, 58),
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white,
-          dotIndicatorColor: Colors.white,
         ),
       ),
     );

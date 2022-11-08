@@ -19,8 +19,7 @@ class _OnButtonState extends State<OnButton> {
   @override
   Widget build(BuildContext context) {
 
-    Size size = MediaQuery.of(context).size;
-    double buttonHeight = size.height*0.1;
+    double buttonHeight = SIZE.height*0.12;
 
     return Container(
       child: Text(

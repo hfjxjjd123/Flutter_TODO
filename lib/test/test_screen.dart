@@ -77,30 +77,27 @@ class TestScreen extends StatelessWidget {
             ),
           ),
         ),
-        floatingActionButton: ExpandableFab(
-            distance: 80,
-            children: [
-            MaterialButton(
-            onPressed: (){
-                StuffService.uploadNewStuff(StuffModel(day: "2022-10-04", todo: "친구생일", stuffId: "2022-10-04친구생일"));
-                BLOC().sinkStuffList(StuffService.getAllStuffs("2022-10-04")); //위 두 줄 test용 이후 수정
-            },
-              child: Icon(Icons.add, color: Colors.white,),
-              color: Theme.of(context).primaryColor,
-              shape: CircleBorder(),
+        floatingActionButton: Stack(
+          children: [
+            Align(
+                child: FloatingActionButton(
+                  onPressed: () {  },
+                  backgroundColor: Color.fromARGB(230, 255, 255, 255),
+                  child: Icon(Icons.person, color: offColor,),
+                ),
+                alignment: Alignment(Alignment.bottomLeft.x+0.2 , Alignment.bottomLeft.y)
             ),
-             MaterialButton(
-               onPressed: (){
-                 StuffService.deleteStuff(StuffModel(day: "2022-10-04", todo: "친구생일", stuffId: "2022-10-04친구생일"));
-                 BLOC().sinkStuffList(StuffService.getAllStuffs("2022-10-04")); //위 두 줄 test용 이후 수정
-               },
-              child: Icon(Icons.exposure_minus_1, color: Colors.white),
-              color: Theme.of(context).primaryColor,
-              shape: CircleBorder(),
+            Align(
+              child: FloatingActionButton(
+                onPressed: () {  },
+                backgroundColor: Color.fromARGB(230, 255, 255, 255),
+                child: Icon(Icons.add, color: offColor,),
+              ),
+              alignment: Alignment.bottomRight,
+            ),
 
+          ],
         ),
-      ],
-      ),
     ),
     );
   }

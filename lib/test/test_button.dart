@@ -21,19 +21,32 @@ class _TestButtonState extends State<TestButton> {
   Widget build(BuildContext context) {
   //버튼 객체의 사이즈를 조절하는 부
   return InkWell(
-    child: Container(
-      child: Text(
-        widget.stuffModel.todo,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 21,
-          fontFamily: "SongMyung"
+    child: Stack(
+      children: [
+        Container(
+          child: Text(
+            widget.stuffModel.todo,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 21,
+                fontFamily: "SongMyung"
+            ),
+          ),
+          alignment: Alignment.center,
+          height: buttonHeight,
+          color: (isOn)?onColor:offColor,
         ),
-      ),
-      alignment: Alignment.center,
-      height: buttonHeight,
-      color: (isOn)?onColor:offColor,
-  ),
+        Positioned(
+          child: Icon(
+            Icons.check_circle,
+            color: (isOn)?Colors.white:Colors.transparent,
+            size: buttonHeight*0.5,
+          ),
+          top: buttonHeight*0.25,
+          left: buttonHeight*0.3,
+        )
+      ]
+    ),
     onTap:()async{
       widget.stuffModel.isDone = !isOn;
       //데이터베이스도 수정될 수 있게 추가

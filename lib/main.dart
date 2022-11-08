@@ -52,5 +52,5 @@ class SelfCareApp extends StatelessWidget {
 
 BeamerDelegate _routerDelegate = BeamerDelegate(
   locationBuilder: BeamerLocationBuilder(
-      beamLocations: [DayLocation(),TestLocation()]),
+      beamLocations: [DayLocation(), TestLocation()]),
 );
