@@ -42,6 +42,9 @@ dependencies:
   cloud_firestore: ^3.4.2
   flutter_expandable_fab: ^1.5.2
   logger: ^1.1.0
+  sliding_up_panel: ^2.0.0+1
+  liquid_progress_indicator: ^0.4.0
+  device_info_plus: ^8.0.0
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +88,10 @@ flutter:
     - family: SongMyung
       fonts:
         - asset: assets/fonts/SongMyung-Regular.ttf
+
+    - family: Jua
+      fonts:
+        - asset: assets/fonts/Jua-Regular.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

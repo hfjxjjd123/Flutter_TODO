@@ -22,17 +22,18 @@ class _OnButtonState extends State<OnButton> {
     double buttonHeight = SIZE.height*0.12;
 
     return Container(
-      child: Text(
-        widget.stuff,
-        style: TextStyle(
-            color: Colors.white,
-            fontSize: 21,
-            fontFamily: "SongMyung"
-        ),
-      ),
+      color: Colors.transparent,
       alignment: Alignment.center,
       height: buttonHeight,
-      color: Colors.transparent,
+      child: Text(
+        widget.stuff,
+        style: const TextStyle(
+            color: Colors.white,
+            fontSize: 21,
+            fontFamily: "Jua"
+        ),
+      ),
+
     );
   }
 }
@@ -53,7 +54,7 @@ class OnBlockTest extends StatelessWidget {
         style: TextStyle(
             color: Colors.white,
             fontSize: 21,
-            fontFamily: "SongMyung"
+            fontFamily: "Jua"
         ),
       ),
       alignment: Alignment.center,

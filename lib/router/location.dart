@@ -8,6 +8,7 @@ import 'package:secare/test/bloc.dart';
 import 'package:secare/test/test_screen.dart';
 
 import '../const/size.dart';
+import '../screens/profile_screen.dart';
 
 class DayLocation extends BeamLocation{
   @override
@@ -34,12 +35,29 @@ class TestLocation extends BeamLocation{
   List<BeamPage> buildPages(context, state) {
     print("testlocation build!!!");
     SIZE = MediaQuery.of(context).size;
-    BLOC().sinkStuffList(StuffService.getAllStuffs("2022.10.04"));
+
     return [
     BeamPage(
-        child: TestScreen(),
-        key: ValueKey('')
+        child: ProfileScreen(),
+        key: ValueKey('profile')
     ),
+    ];
+  }
+
+  @override
+  List get pathBlueprints => ["/profile"];
+}
+
+class ProfileLocation extends BeamLocation{
+  @override
+  List<BeamPage> buildPages(context, state) {
+    SIZE = MediaQuery.of(context).size;
+    BLOC().sinkStuffList(StuffService.getAllStuffs("2022.10.04"));
+    return [
+      BeamPage(
+          child: TestScreen(),
+          key: ValueKey('')
+      ),
     ];
   }
 

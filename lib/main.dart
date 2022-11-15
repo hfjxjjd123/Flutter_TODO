@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:secare/router/location.dart';
 import 'package:secare/screens/day_screen.dart';
@@ -7,6 +8,7 @@ import 'package:secare/screens/splash_screen.dart';
 import 'package:beamer/beamer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../const/size.dart';
+import 'services/profile/get_mobile_id.dart';
 
 void main(){
   runApp(SelfCareApp());
@@ -17,10 +19,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp.router(
       title: 'umm',
+
+      theme: ThemeData(
+        textTheme: TextTheme(
+          headline3: TextStyle(color: Colors.white, fontSize: 24, fontFamily: 'Jua'),
+          headline4: TextStyle(color: Colors.white, fontSize: 16, fontFamily: 'Jua'),
+          headline6: TextStyle(color: Colors.white, fontSize: 12, fontFamily: 'Jua'),
+        ),
+      ),
+
       routeInformationParser: BeamerParser(),
       routerDelegate: _routerDelegate,
+      backButtonDispatcher: BeamerBackButtonDispatcher(delegate: _routerDelegate),
     );
   }
 }
@@ -52,5 +65,9 @@ class SelfCareApp extends StatelessWidget {
 
 BeamerDelegate _routerDelegate = BeamerDelegate(
   locationBuilder: BeamerLocationBuilder(
-      beamLocations: [DayLocation(), TestLocation()]),
+      beamLocations: [
+        DayLocation(),
+        ProfileLocation(),
+        TestLocation()
+      ]),
 );

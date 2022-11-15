@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,8 @@ import 'package:secare/data/stuff_model.dart';
 import 'package:secare/provider/onclick_notifier.dart';
 import 'package:secare/const/colors.dart';
 import 'package:secare/repo/stuff_service.dart';
+import 'package:secare/services/add_task/add_task_dialog.dart';
+import 'package:secare/test/test_screen.dart';
 import 'package:secare/widgets/datetime_widget.dart';
 import 'package:secare/widgets/on_button.dart';
 
@@ -86,49 +89,56 @@ class _DayScreenState extends State<DayScreen> {
             columnSmallPadding(),
             Expanded(
               child: FutureBuilder<List<StuffModel>>(
-                future: StuffService.getAllStuffs("2022. 09. 22"), //수정해
-                builder: (context, snapshot) {
-                  if(snapshot.hasData){
-                    for(int i=0;i<snapshot.data!.length;i++){
-                      stuffs.add(OnButton(stuff: snapshot.data![i].todo));
-                    }
-                    return ListView.builder(
-                      itemCount: (allStuffs.length),
-                      itemBuilder: (BuildContext context, int index) {
-                        return InkWell(
-                          child: Stack(
-                              children: [
-                                Container(child: allStuffs[index], color:(widget.onList[index])?onColor:offColor,),
-                                Positioned(
-                                  child: Icon(
-                                    Icons.check_circle,
-                                    color: (widget.onList[index])?Colors.white:Colors.transparent,
-                                    size: buttonHeight*0.5,
-                                  ),
-                                  top: buttonHeight*0.25,
-                                  left: buttonHeight*0.3,
-                                )
-                              ]
-                          ),
-                          onTap: (){
-                            if(index == allStuffs.length-1){
+                  future: StuffService.getAllStuffs("2022. 09. 22"), //수정해
+                  builder: (context, snapshot) {
+                    if(snapshot.hasData){
+                      for(int i=0;i<snapshot.data!.length;i++){
+                        stuffs.add(OnButton(stuff: snapshot.data![i].todo));
+                      }
+                      return ListView.builder(
+                        itemCount: (allStuffs.length),
+                        itemBuilder: (BuildContext context, int index) {
+                          return InkWell(
+                            child: Stack(
+                                children: [
+                                  Container(child: allStuffs[index], color:(widget.onList[index])?onColor:offColor,),
+                                  Positioned(
+                                    child: Icon(
+                                      Icons.check_circle,
+                                      color: (widget.onList[index])?Colors.white:Colors.transparent,
+                                      size: buttonHeight*0.5,
+                                    ),
+                                    top: buttonHeight*0.25,
+                                    left: buttonHeight*0.3,
+                                  )
+                                ]
+                            ),
+                            onTap: (){
+                              if(index == allStuffs.length-1){
 
-                            } else if(index<mainStuffs.length || index>mainStuffs.length+2){
-                              if(widget.onList[index]==true){
-                                context.read<OnclickNotifier>().offclick();
-                              } else{
-                                context.read<OnclickNotifier>().onclick();
+                              } else if(index<mainStuffs.length || index>mainStuffs.length+2){
+                                if(widget.onList[index]==true){
+                                  context.read<OnclickNotifier>().offclick();
+                                } else{
+                                  context.read<OnclickNotifier>().onclick();
+                                }
+                                widget.onList[index] = !widget.onList[index];
+                                setState((){});
                               }
-                              widget.onList[index] = !widget.onList[index];
-                              setState((){});
-                            }
-                          },
-                        );
-                      },
+                            },
+                          );
+                        },
+                      );
+                    } else return Container(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      ),
+                      color: offColor,
                     );
-                  } else return Container(child: Text("Not Yet"),);
 
-                }
+                  }
               ),
             ),
           ],
@@ -136,20 +146,33 @@ class _DayScreenState extends State<DayScreen> {
         floatingActionButton: Stack(
           children: [
             Align(
-              child: FloatingActionButton(
-                onPressed: () {  },
-                backgroundColor: Color.fromARGB(230, 255, 255, 255),
-                child: Icon(Icons.person, color: offColor,),
-              ),
-              alignment: Alignment(Alignment.bottomLeft.x+0.2 , Alignment.bottomLeft.y)
+                alignment: Alignment(Alignment.bottomLeft.x+0.2 , Alignment.bottomLeft.y),
+                child: FloatingActionButton(
+                  heroTag: "toProfile",
+                  onPressed: () {
+                    Beamer.of(context).beamToNamed('/profile');
+                  },
+                  backgroundColor: Color.fromARGB(230, 255, 255, 255),
+                  child: Icon(Icons.person, color: offColor,),
+                )
             ),
             Align(
+              alignment: Alignment.bottomRight,
               child: FloatingActionButton(
-                onPressed: () {  },
+                heroTag: "toAddTask",
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+
+                      builder: (BuildContext context){
+                        return AddTaskDialog();
+                      },
+                  );
+                },
                 backgroundColor: Color.fromARGB(230, 255, 255, 255),
                 child: Icon(Icons.add, color: offColor,),
               ),
-              alignment: Alignment.bottomRight,
             ),
 
           ],
