@@ -33,6 +33,7 @@ class DTaskService{
 //수정과 생성을 나누면?//수정은 바뀐 onCOunt값을?
 
   static Future<List<TaskModel>> readTasks(String day) async{
+
     CollectionReference<Map<String,dynamic>> collectionReference =  FirebaseFirestore.instance
         .collection(MID).doc("DailyTask")
         .collection('tasks');

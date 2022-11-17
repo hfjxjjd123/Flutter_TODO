@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:secare/const/colors.dart';
+import 'package:secare/const/fetching_analysis_flag.dart';
 import 'package:secare/const/size.dart';
+import 'package:secare/repo/analysis_service_daily.dart';
+import 'package:secare/repo/analysis_service_fixed.dart';
+import 'package:secare/repo/profile_service.dart';
 import 'package:secare/test/test_screen.dart';
 
 import '../../data/task_model.dart';
+import '../../repo/analysis_service_accumulate.dart';
 import '../../repo/dtask_service.dart';
 
 class AddTaskDialog extends StatefulWidget {
@@ -117,7 +122,15 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                         isFixed: isFixedTask,
                       );
 
-                      await DTaskService.writeTask(taskModel);
+                      await DTaskService.writeTask(taskModel);await AnalysisServiceDaily.updateAnalysisDaily(ADD_NEW);
+                      await AnalysisServiceDaily.updateAnalysisDaily(ADD_NEW);
+                      await AnalysisServiceAccumulate.updateAnalysisAccumulate(ADD_NEW);
+
+                      if(isFixedTask){
+                        await ProfileService.addFixedTaskToProfile(taskModel.todo);
+                        await AnalysisServiceFixed.updateAnalysisFixed(taskModel.todo, ADD_NEW);
+
+                      }
 
                       Navigator.pop(context);
                     },

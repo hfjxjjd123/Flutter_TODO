@@ -34,3 +34,27 @@ class TaskModel {
 
 }
 
+/// todo : "todo"
+class TaskModelForProfile {
+  late String todo;
+
+  TaskModelForProfile({required this.todo,});
+
+  TaskModelForProfile.fromJson(dynamic json) {
+    todo = json['todo'];
+  }
+
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['todo'] = todo;
+    return map;
+  }
+
+  TaskModelForProfile.fromSnapshot(DocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data()!);
+  TaskModelForProfile.fromQuerySnapshot(QueryDocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data());
+
+}
+
+
+
