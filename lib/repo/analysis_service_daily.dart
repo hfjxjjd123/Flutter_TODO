@@ -33,8 +33,9 @@ class AnalysisServiceDaily{
     if(!snapshot.exists){
       logger.d("이건 절대 시행되면 안돼");
       DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(date: DateView.getDate());
-      initAnalysisDaily(dailyAnalysisModel);
-      updateAnalysisDaily(stat);
+      await initAnalysisDaily(dailyAnalysisModel);
+      await updateAnalysisDaily(stat);
+
     } else{
       DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel.fromSnapshot(snapshot);
 
@@ -63,5 +64,26 @@ class AnalysisServiceDaily{
         await analDocReference.update(dailyAnalysisModel.toJson());
     }
 
+  }
+
+  static Future<double> readDailyProgress() async{
+    DocumentReference<Map<String,dynamic>> documentReference =  FirebaseFirestore.instance
+        .collection(MID).doc("Analysis")
+        .collection("Days").doc(DateView.getDate());
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await documentReference.get();
+
+    if(!snapshot.exists){
+      logger.d("그런거 없습니다");
+      return 0.0;
+    } else{
+      DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel.fromSnapshot(snapshot);
+
+      int done = dailyAnalysisModel.doneCounter;
+      int all = dailyAnalysisModel.allCounter;
+      double progress  = done.toDouble()/all.toDouble();
+
+      return progress;
+    }
   }
 }

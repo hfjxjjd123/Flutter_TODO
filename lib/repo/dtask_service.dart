@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:secare/repo/analysis_service_daily.dart';
 import 'package:secare/test/test_screen.dart';
 import '../const/mid.dart';
 import '../data/task_model.dart';
@@ -16,10 +17,12 @@ class DTaskService{
     }
   }
 
-  static Future updateTask(TaskModel taskModel) async{
+  static Future updateTask(String todo, bool isFixed) async{
     DocumentReference<Map<String, dynamic>> TaskDocReference = FirebaseFirestore.instance
         .collection(MID).doc("DailyTask")
-        .collection('tasks').doc(taskModel.todo);
+        .collection('tasks').doc(todo);
+
+    TaskModel taskModel = TaskModel(todo: todo, isFixed: isFixed);
 
     final DocumentSnapshot documentSnapshot = await TaskDocReference.get();
 
@@ -30,9 +33,30 @@ class DTaskService{
     }
   }
 
+  static Future updateTaskDone(String todo) async{
+    DocumentReference<Map<String, dynamic>> TaskDocReference = FirebaseFirestore.instance
+        .collection(MID).doc("DailyTask")
+        .collection('tasks').doc(todo);
+
+    final DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await TaskDocReference.get();
+
+    if(!documentSnapshot.exists){
+      logger.d("not exist!"); // 수정요함
+    } else {
+      TaskModel taskModel = TaskModel.fromSnapshot(documentSnapshot);
+      taskModel.isDone = !taskModel.isDone;
+      await TaskDocReference.update(taskModel.toJson());
+
+      int stat = (taskModel.isDone)?4:3;
+      await AnalysisServiceDaily.updateAnalysisDaily(stat);
+    }
+  }
+
+  //중복체크 수정요망
+
 //수정과 생성을 나누면?//수정은 바뀐 onCOunt값을?
 
-  static Future<List<TaskModel>> readTasks(String day) async{
+  static Future<List<TaskModel>> readTasks() async{
 
     CollectionReference<Map<String,dynamic>> collectionReference =  FirebaseFirestore.instance
         .collection(MID).doc("DailyTask")

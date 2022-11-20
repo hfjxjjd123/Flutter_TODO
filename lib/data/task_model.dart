@@ -17,7 +17,7 @@ class TaskModel {
   TaskModel.fromJson(dynamic json) {
     todo = json['todo'];
     isDone = json['isDone'];
-    isDone = json['isFixed'];
+    isFixed = json['isFixed'];
   }
 
 

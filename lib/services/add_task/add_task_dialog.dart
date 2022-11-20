@@ -122,14 +122,13 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                         isFixed: isFixedTask,
                       );
 
-                      await DTaskService.writeTask(taskModel);await AnalysisServiceDaily.updateAnalysisDaily(ADD_NEW);
+                      await DTaskService.writeTask(taskModel);
                       await AnalysisServiceDaily.updateAnalysisDaily(ADD_NEW);
                       await AnalysisServiceAccumulate.updateAnalysisAccumulate(ADD_NEW);
 
                       if(isFixedTask){
                         await ProfileService.addFixedTaskToProfile(taskModel.todo);
                         await AnalysisServiceFixed.updateAnalysisFixed(taskModel.todo, ADD_NEW);
-
                       }
 
                       Navigator.pop(context);
