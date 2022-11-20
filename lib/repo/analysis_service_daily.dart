@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:secare/repo/dtask_service.dart';
+import 'package:secare/repo/profile_service.dart';
 import 'package:secare/test/test_screen.dart';
 import 'package:secare/widgets/datetime_widget.dart';
 import '../const/fetching_analysis_flag.dart';
 import '../const/mid.dart';
 import '../data/daily_analysis_model.dart';
+import '../data/task_model.dart';
 
 class AnalysisServiceDaily{
 
@@ -67,6 +70,9 @@ class AnalysisServiceDaily{
   }
 
   static Future<double> readDailyProgress() async{
+
+    double progress;
+
     DocumentReference<Map<String,dynamic>> documentReference =  FirebaseFirestore.instance
         .collection(MID).doc("Analysis")
         .collection("Days").doc(DateView.getDate());
@@ -74,16 +80,49 @@ class AnalysisServiceDaily{
     DocumentSnapshot<Map<String, dynamic>> snapshot = await documentReference.get();
 
     if(!snapshot.exists){
-      logger.d("그런거 없습니다");
+
+      await DTaskService.clearDay();
+
+      List<String> fixes = await ProfileService.readFixedTaskInProfile();
+      for(String fixedTask in fixes){
+        TaskModel taskModel = TaskModel(
+          todo: fixedTask,
+          isFixed: true
+        );
+        await DTaskService.writeTask(taskModel);
+        await updateAnalysisDaily(ADD_NEW);
+      }
+      //나머지는 삭제하는 로직 수정요함
+
       return 0.0;
     } else{
       DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel.fromSnapshot(snapshot);
 
       int done = dailyAnalysisModel.doneCounter;
       int all = dailyAnalysisModel.allCounter;
-      double progress  = done.toDouble()/all.toDouble();
+      if(all != 0){
+        progress  = done.toDouble()/all.toDouble();
+      } else {
+        progress = 0;
+      }
 
       return progress;
     }
   }
+
+  // static Future<bool> checkDate() async{
+  //
+  //   CollectionReference<Map<String,dynamic>> collectionReference =  FirebaseFirestore.instance
+  //       .collection(MID).doc("Analysis")
+  //       .collection("Days");
+  //
+  //   QuerySnapshot<Map<String, dynamic>> snapshots = await collectionReference.get();
+  //
+  //   for(int i=0; i<snapshots.size ; i++){
+  //
+  //
+  //   }
+  //
+  //
+  // }
 }

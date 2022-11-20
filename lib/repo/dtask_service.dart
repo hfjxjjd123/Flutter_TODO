@@ -58,6 +58,9 @@ class DTaskService{
 
   static Future<List<TaskModel>> readTasks() async{
 
+    //날짜가 바뀌었는지 확인하는 로직
+
+
     CollectionReference<Map<String,dynamic>> collectionReference =  FirebaseFirestore.instance
         .collection(MID).doc("DailyTask")
         .collection('tasks');
@@ -86,6 +89,18 @@ class DTaskService{
       print("there is no such data model"); //수정요함
     }
   } // test this code in home
+
+  static Future<void> clearDay() async{
+    CollectionReference<Map<String, dynamic>> collectionReference = FirebaseFirestore.instance
+        .collection(MID).doc("DailyTask")
+        .collection('tasks');
+
+    final QuerySnapshot<Map<String, dynamic>> snapshot = await collectionReference.get();
+
+    for(DocumentSnapshot documentSnapshot in snapshot.docs){
+      documentSnapshot.reference.delete();
+    }
+  }
 
 
 }

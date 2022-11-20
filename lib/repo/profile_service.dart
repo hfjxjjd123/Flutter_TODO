@@ -30,6 +30,22 @@ class ProfileService{
     }
   }
 
+  static Future<List<String>> readFixedTaskInProfile() async {
+    List<String> fixes = [];
+
+    CollectionReference<Map<String, dynamic>> taskColReference = FirebaseFirestore.instance
+        .collection(MID).doc("Profile")
+        .collection("FixedTasks");
+
+    final QuerySnapshot<Map<String, dynamic>> snapshot = await taskColReference.get();
+
+    for(DocumentSnapshot documentSnapshot in snapshot.docs){
+      fixes.add(documentSnapshot.id);
+    }
+
+    return fixes;
+  }
+
   static Future addFixedTaskToProfile(String todo) async{
     TaskModelForProfile taskModelForProfile = TaskModelForProfile(todo: todo);
 
