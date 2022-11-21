@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:secare/repo/analysis_service_accumulate.dart';
 import 'package:secare/repo/analysis_service_fixed.dart';
 import 'package:secare/repo/dtask_service.dart';
 import 'package:secare/repo/profile_service.dart';
@@ -35,8 +36,9 @@ class AnalysisServiceDaily{
 
 
     if(!snapshot.exists){ //여기서 새로운 날짜가 업데이트가 되는데 ...
-      logger.d("이건 절대 시행되면 안돼");
-      DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(date: DateView.getDate());
+      await lazyDaysAdd();
+
+      DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(date: DateView.getDate(), allCounter: 0, doneCounter: 0);
       await initAnalysisDaily(dailyAnalysisModel);
       await updateAnalysisDaily(stat);
 
@@ -84,7 +86,7 @@ class AnalysisServiceDaily{
 
       await DTaskService.clearDay();
 
-      List<String> fixes = await ProfileService.readFixedTaskInProfile();
+      List<String> fixes = await ProfileService.readFixedTaskInProfile(); //여기서도 날짜바뀜 감지
       for(String fixedTask in fixes){
         TaskModel taskModel = TaskModel(
           todo: fixedTask,
@@ -128,4 +130,43 @@ class AnalysisServiceDaily{
 
     return progresses;
   }
+
+  static Future lazyDaysAdd() async{
+    logger.d("lazy update 실행됨");
+    int before = 1;
+    String date = DateView.getYesterDate(before);
+    logger.d("yesterday: $date");
+    String? last;
+
+    List<String> fixes = await ProfileService.readFixedTaskInProfile(); //여기서도 날짜바뀜 감지
+    for(String fixedTask in fixes){
+      TaskModel taskModel = TaskModel(
+          todo: fixedTask,
+          isFixed: true
+      );
+
+      CollectionReference<Map<String,dynamic>> collectionReference =  FirebaseFirestore.instance
+          .collection(MID).doc("Analysis")
+          .collection('Days');
+      QuerySnapshot<Map<String, dynamic>> snapshots = await collectionReference.get();
+
+      if(snapshots.size != 0){
+        last = DailyAnalysisModel.fromQuerySnapshot(snapshots.docs[snapshots.size-1]).date;
+        logger.d("last: $last");
+        while(last != date){
+          DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(date: date,allCounter: fixes.length,doneCounter: 0);//
+          await initAnalysisDaily(dailyAnalysisModel);
+          await AnalysisServiceFixed.updateAnalysisFixed(taskModel.todo, MULTIPLE_ADD+fixes.length); //
+          await AnalysisServiceAccumulate.updateAnalysisAccumulate(MULTIPLE_ADD+fixes.length);
+          before++;
+          date = DateView.getYesterDate(before);
+          logger.d(date == last);
+        }
+      }
+
+      // 날짜별로 루프돌기
+
+    }
+  }
+
 }

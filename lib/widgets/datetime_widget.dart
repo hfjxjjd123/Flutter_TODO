@@ -26,6 +26,13 @@ class DateView extends StatelessWidget {
     return strToday;
   }
 
+  static String getYesterDate(int n){
+    DateTime yes = DateTime.now().subtract(Duration(days: n));
+    DateFormat formatter = DateFormat('yyyy. MM. dd');
+    var strYesterday = formatter.format(yes);
+    return strYesterday;
+  }
+
   static int getWeekday(){
     DateTime now = DateTime.now();
     return now.weekday;

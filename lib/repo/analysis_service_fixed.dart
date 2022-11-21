@@ -27,7 +27,6 @@ class AnalysisServiceFixed{
   }
 
   static Future updateAnalysisFixed(String todo,int stat) async{
-
     DocumentReference<Map<String, dynamic>> analDocReference = FirebaseFirestore.instance
         .collection(MID).doc("Analysis")
         .collection("Fixed").doc(todo);
@@ -62,7 +61,9 @@ class AnalysisServiceFixed{
         } break;
         case RENAME:break;
         case READ:break;
-        default: break;
+        default: {
+          fixedAnalysisModel.allCounter += stat-MULTIPLE_ADD;
+        }break;
       }
 
       await analDocReference.update(fixedAnalysisModel.toJson());

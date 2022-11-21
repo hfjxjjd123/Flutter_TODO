@@ -56,7 +56,9 @@ class AnalysisServiceAccumulate{
         }break;
         case RENAME:break;
         case READ:break;
-        default: break;
+        default:{
+            accumulateAnalysisModel.allCounter += stat-MULTIPLE_ADD;
+          }break;
       }
 
       await analDocReference.update(accumulateAnalysisModel.toJson());

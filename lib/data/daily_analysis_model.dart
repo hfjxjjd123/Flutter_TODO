@@ -9,7 +9,9 @@ class DailyAnalysisModel {
   late String date;
 
   DailyAnalysisModel({
-    required this.date
+    required this.date,
+    required this.allCounter,
+    required this.doneCounter
   });
 
   DailyAnalysisModel.fromJson(dynamic json) {
