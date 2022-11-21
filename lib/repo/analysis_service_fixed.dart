@@ -69,4 +69,21 @@ class AnalysisServiceFixed{
     }
 
   }
+
+  static Future<List<FixedAnalysisModel>> readFixedProgress() async {
+    List<FixedAnalysisModel> fixes = [];
+
+    CollectionReference<Map<String, dynamic>> taskColReference = FirebaseFirestore.instance
+        .collection(MID).doc("Analysis")
+        .collection("Fixed");
+
+    final QuerySnapshot<Map<String, dynamic>> snapshot = await taskColReference.get();
+
+    for(DocumentSnapshot<Map<String, dynamic>> documentSnapshot in snapshot.docs){
+      FixedAnalysisModel fixedAnalysisModel = FixedAnalysisModel.fromSnapshot(documentSnapshot);
+      fixes.add(fixedAnalysisModel);
+    }
+
+    return fixes;
+  }
 }

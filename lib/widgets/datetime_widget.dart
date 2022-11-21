@@ -25,4 +25,9 @@ class DateView extends StatelessWidget {
     var strToday = formatter.format(now);
     return strToday;
   }
+
+  static int getWeekday(){
+    DateTime now = DateTime.now();
+    return now.weekday;
+  }
 }

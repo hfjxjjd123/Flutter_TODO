@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:secare/repo/analysis_service_fixed.dart';
 import 'package:secare/repo/dtask_service.dart';
 import 'package:secare/repo/profile_service.dart';
 import 'package:secare/test/test_screen.dart';
@@ -33,7 +34,7 @@ class AnalysisServiceDaily{
 
 
 
-    if(!snapshot.exists){
+    if(!snapshot.exists){ //여기서 새로운 날짜가 업데이트가 되는데 ...
       logger.d("이건 절대 시행되면 안돼");
       DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(date: DateView.getDate());
       await initAnalysisDaily(dailyAnalysisModel);
@@ -90,6 +91,7 @@ class AnalysisServiceDaily{
           isFixed: true
         );
         await DTaskService.writeTask(taskModel);
+        await AnalysisServiceFixed.updateAnalysisFixed(taskModel.todo, ADD_NEW);
         await updateAnalysisDaily(ADD_NEW);
       }
       //나머지는 삭제하는 로직 수정요함
@@ -110,19 +112,20 @@ class AnalysisServiceDaily{
     }
   }
 
-  // static Future<bool> checkDate() async{
-  //
-  //   CollectionReference<Map<String,dynamic>> collectionReference =  FirebaseFirestore.instance
-  //       .collection(MID).doc("Analysis")
-  //       .collection("Days");
-  //
-  //   QuerySnapshot<Map<String, dynamic>> snapshots = await collectionReference.get();
-  //
-  //   for(int i=0; i<snapshots.size ; i++){
-  //
-  //
-  //   }
-  //
-  //
-  // }
+  static Future<List<DailyAnalysisModel>> readDaysProgress() async{
+
+    CollectionReference<Map<String,dynamic>> collectionReference =  FirebaseFirestore.instance
+        .collection(MID).doc("Analysis")
+        .collection('Days');
+    QuerySnapshot<Map<String, dynamic>> snapshots = await collectionReference.get();
+
+    List<DailyAnalysisModel> progresses = [];
+
+    for(int i=0; i<snapshots.size ; i++){
+      DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel.fromQuerySnapshot(snapshots.docs[i]);
+      progresses.add(dailyAnalysisModel);
+    }
+
+    return progresses;
+  }
 }

@@ -47,8 +47,13 @@ class AnalysisServiceAccumulate{
           accumulateAnalysisModel.doneCounter--;
           accumulateAnalysisModel.allCounter--;
         } break;
-        case DONE_TO_DO:break;
-        case DO_TO_DONE: break;
+        case DONE_TO_DO:{
+          accumulateAnalysisModel.doneCounter--;
+        }
+          break;
+        case DO_TO_DONE: {
+          accumulateAnalysisModel.doneCounter++;
+        }break;
         case RENAME:break;
         case READ:break;
         default: break;
@@ -56,6 +61,33 @@ class AnalysisServiceAccumulate{
 
       await analDocReference.update(accumulateAnalysisModel.toJson());
     }
+  }
 
+  static Future<double> readAccumulateProgress() async{
+
+    double progress;
+
+    DocumentReference<Map<String,dynamic>> documentReference =  FirebaseFirestore.instance
+        .collection(MID).doc("Analysis")
+        .collection("Accumulate").doc("accumulate");
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await documentReference.get();
+
+    if(!snapshot.exists){
+      logger.d("error!");
+      return 0.0;
+    } else{
+      AccumulateAnalysisModel accumulateAnalysisModel = AccumulateAnalysisModel.fromSnapshot(snapshot);
+
+      int done = accumulateAnalysisModel.doneCounter;
+      int all = accumulateAnalysisModel.allCounter;
+      if(all != 0){
+        progress  = done.toDouble()/all.toDouble();
+      } else {
+        progress = 0;
+      }
+
+      return progress;
+    }
   }
 }

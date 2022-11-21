@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:secare/repo/analysis_service_accumulate.dart';
 import 'package:secare/repo/analysis_service_daily.dart';
 import 'package:secare/test/test_screen.dart';
 import '../const/mid.dart';
 import '../data/task_model.dart';
+import 'analysis_service_fixed.dart';
 
 class DTaskService{
   static Future writeTask(TaskModel taskModel) async{
@@ -49,6 +51,11 @@ class DTaskService{
 
       int stat = (taskModel.isDone)?4:3;
       await AnalysisServiceDaily.updateAnalysisDaily(stat);
+      await AnalysisServiceAccumulate.updateAnalysisAccumulate(stat);
+
+      if(taskModel.isFixed == true){
+        await AnalysisServiceFixed.updateAnalysisFixed(todo, stat);
+      }
     }
   }
 
@@ -57,9 +64,6 @@ class DTaskService{
 //수정과 생성을 나누면?//수정은 바뀐 onCOunt값을?
 
   static Future<List<TaskModel>> readTasks() async{
-
-    //날짜가 바뀌었는지 확인하는 로직
-
 
     CollectionReference<Map<String,dynamic>> collectionReference =  FirebaseFirestore.instance
         .collection(MID).doc("DailyTask")

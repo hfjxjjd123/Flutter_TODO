@@ -7,7 +7,9 @@ import 'package:secare/data/daily_analysis_model.dart';
 import 'package:secare/data/stuff_model.dart';
 import 'package:secare/provider/onclick_notifier.dart';
 import 'package:secare/const/colors.dart';
+import 'package:secare/repo/analysis_service_accumulate.dart';
 import 'package:secare/repo/analysis_service_daily.dart';
+import 'package:secare/repo/analysis_service_fixed.dart';
 import 'package:secare/repo/dtask_service.dart';
 import 'package:secare/repo/stuff_service.dart';
 import 'package:secare/services/add_task/add_task_dialog.dart';
@@ -125,7 +127,6 @@ class _DayScreenState extends State<DayScreen> {
                             onTap: ()async{
                               if(index<fOn.length){
                                 await DTaskService.updateTaskDone(fTodo[index]);
-
                                 setState((){
                                   logger.d("done!!!");
                                 });
