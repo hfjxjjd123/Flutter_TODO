@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:secare/data/stuff_model.dart';
 import 'package:secare/provider/onclick_notifier.dart';
 import 'package:secare/repo/stuff_service.dart';
@@ -25,15 +26,16 @@ class _OnButtonState extends State<OnButton> {
       color: Colors.transparent,
       alignment: Alignment.center,
       height: buttonHeight,
-      child: Text(
-        widget.stuff,
-        style: const TextStyle(
-            color: Colors.white,
-            fontSize: 21,
-            fontFamily: "Jua"
+      child: Center(
+          child: Text(
+            widget.stuff,
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 21,
+                fontFamily: "Jua"
+            ),
+          ),
         ),
-      ),
-
     );
   }
 }

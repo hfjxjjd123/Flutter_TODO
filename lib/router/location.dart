@@ -1,10 +1,8 @@
 import 'package:beamer/beamer.dart';
-import 'package:provider/provider.dart';
-import 'package:secare/provider/onclick_notifier.dart';
-import 'package:secare/repo/stuff_service.dart';
-import 'package:secare/screens/day_screen.dart';
+import 'package:secare/const/mid.dart';
+import 'package:secare/repo/uid_service.dart';
 import 'package:flutter/material.dart';
-import 'package:secare/test/bloc.dart';
+import 'package:secare/services/profile/screen_profile_edit.dart';
 import 'package:secare/test/save.dart';
 import 'package:secare/test/test_screen.dart';
 
@@ -15,12 +13,29 @@ class DayLocation extends BeamLocation{
   @override
   List<BeamPage> buildPages(context, state) {
     SIZE = MediaQuery.of(context).size;
-    print("daylocation build");
+
     return [
       BeamPage(
-          child: ChangeNotifierProvider<OnclickNotifier>(
-              create: (BuildContext context) { return OnclickNotifier(); },
-              child: DayScreen(),
+          child: FutureBuilder<String>(
+            future: UidService.readDeviceInfo(),
+            builder: (context, snapshot) {
+              if(snapshot.hasData){
+                if(snapshot.data != "not found"){
+                  logger.d(snapshot.data!);
+                  MID = snapshot.data!;
+                }else{
+                  logger.d("User 생성!! // 1번만해야돼");
+                  String mid = UidService.createUID();
+                  UidService.writeDeviceInfo(mid);
+                  MID = mid;
+                  logger.d("created mid = $mid");
+                }
+              }else{
+                return Container();
+              }
+
+              return DayScreen();
+            }
           ),
           key: ValueKey('day')
       ),
@@ -31,10 +46,9 @@ class DayLocation extends BeamLocation{
   List get pathBlueprints => ["/day"];
 }
 
-class TestLocation extends BeamLocation{
+class ProfileLocation extends BeamLocation{
   @override
   List<BeamPage> buildPages(context, state) {
-    print("testlocation build!!!");
     SIZE = MediaQuery.of(context).size;
 
     return [
@@ -49,20 +63,19 @@ class TestLocation extends BeamLocation{
   List get pathBlueprints => ["/profile"];
 }
 
-class ProfileLocation extends BeamLocation{
+class ProfileEditLocation extends BeamLocation{
   @override
   List<BeamPage> buildPages(context, state) {
     SIZE = MediaQuery.of(context).size;
-    BLOC().sinkStuffList(StuffService.getAllStuffs("2022.10.04"));
+
     return [
       BeamPage(
-          child: TestScreen(),
-          key: ValueKey('')
+          child: ProfileEditScreen(),
+          key: ValueKey('profile_edit')
       ),
     ];
   }
 
   @override
-  List get pathBlueprints => ["/"];
+  List get pathBlueprints => ["/profile_edit"];
 }
-

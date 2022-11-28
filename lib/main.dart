@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:secare/router/location.dart';
 import 'package:secare/screens/day_screen.dart';
@@ -8,7 +6,6 @@ import 'package:secare/screens/splash_screen.dart';
 import 'package:beamer/beamer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../const/size.dart';
-import 'services/profile/get_mobile_id.dart';
 
 void main(){
   runApp(SelfCareApp());
@@ -68,6 +65,6 @@ BeamerDelegate _routerDelegate = BeamerDelegate(
       beamLocations: [
         DayLocation(),
         ProfileLocation(),
-        TestLocation()
+        ProfileEditLocation()
       ]),
 );

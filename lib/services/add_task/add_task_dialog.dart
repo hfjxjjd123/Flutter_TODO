@@ -8,11 +8,16 @@ import 'package:secare/repo/profile_service.dart';
 import 'package:secare/test/test_screen.dart';
 
 import '../../data/task_model.dart';
+import '../../repo/analysis_accumulate.dart';
+import '../../repo/analysis_daily.dart';
+import '../../repo/analysis_fixed.dart';
 import '../../repo/analysis_service_accumulate.dart';
 import '../../repo/dtask_service.dart';
+import '../../test/save.dart';
 
 class AddTaskDialog extends StatefulWidget {
-  const AddTaskDialog({Key? key}) : super(key: key);
+  final Function() notifyParent;
+  const AddTaskDialog({Key? key, required this.notifyParent}) : super(key: key);
 
   @override
   State<AddTaskDialog> createState() => _AddTaskDialogState();
@@ -21,6 +26,7 @@ class AddTaskDialog extends StatefulWidget {
 class _AddTaskDialogState extends State<AddTaskDialog> {
   bool isFixedTask = true;
   TextEditingController _textEditingController = TextEditingController();
+  bool _isUploading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +34,13 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
       content: Container(
         height: SIZE.height*0.23,
-        child: Column(
+        child: (_isUploading) ?Center(child: CircularProgressIndicator(color: Colors.white70,),)
+            :Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(height: 10,),
+            Container(
+              height: SIZE.height*0.012,
+            ),
             SizedBox(
               width: SIZE.width*0.5,
               child: TextFormField(
@@ -115,7 +124,8 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                   Expanded(child: Container()),
                   InkWell(
                     onTap: () async {
-                      logger.d(_textEditingController.text);
+                      _isUploading = true;
+                      setState((){});
 
                       TaskModel taskModel = TaskModel(
                         todo: _textEditingController.text,
@@ -124,13 +134,13 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
 
                       await DTaskService.writeTask(taskModel);
                       await AnalysisServiceDaily.updateAnalysisDaily(ADD_NEW);
-                      await AnalysisServiceAccumulate.updateAnalysisAccumulate(ADD_NEW);
+                      await AnalysisAccumulate.updateAnalysisAccumulate(ADD_NEW);
 
                       if(isFixedTask){
                         await ProfileService.addFixedTaskToProfile(taskModel.todo);
                         await AnalysisServiceFixed.updateAnalysisFixed(taskModel.todo, ADD_NEW);
                       }
-
+                      widget.notifyParent();
                       Navigator.pop(context);
                     },
                     highlightColor: Colors.white70,

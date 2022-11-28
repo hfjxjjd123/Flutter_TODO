@@ -9,8 +9,10 @@ import '../const/fetching_analysis_flag.dart';
 import '../const/mid.dart';
 import '../data/daily_analysis_model.dart';
 import '../data/task_model.dart';
+import 'analysis_accumulate.dart';
+import 'analysis_fixed.dart';
 
-class AnalysisServiceDaily{
+class AnalysisServiceDaily{ //done. Firebase 이용하기로 했음 directory issue
 
   //when you first signUp
   static Future initAnalysisDaily(DailyAnalysisModel dailyAnalysisModel) async{
@@ -92,8 +94,8 @@ class AnalysisServiceDaily{
           todo: fixedTask,
           isFixed: true
         );
-        await DTaskService.writeTask(taskModel);
         await AnalysisServiceFixed.updateAnalysisFixed(taskModel.todo, ADD_NEW);
+        await DTaskService.writeTask(taskModel);
         await updateAnalysisDaily(ADD_NEW);
       }
       //나머지는 삭제하는 로직 수정요함
@@ -140,6 +142,7 @@ class AnalysisServiceDaily{
 
     List<String> fixes = await ProfileService.readFixedTaskInProfile(); //여기서도 날짜바뀜 감지
     for(String fixedTask in fixes){
+
       TaskModel taskModel = TaskModel(
           todo: fixedTask,
           isFixed: true
@@ -157,7 +160,7 @@ class AnalysisServiceDaily{
           DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(date: date,allCounter: fixes.length,doneCounter: 0);//
           await initAnalysisDaily(dailyAnalysisModel);
           await AnalysisServiceFixed.updateAnalysisFixed(taskModel.todo, MULTIPLE_ADD+fixes.length); //
-          await AnalysisServiceAccumulate.updateAnalysisAccumulate(MULTIPLE_ADD+fixes.length);
+          await AnalysisAccumulate.updateAnalysisAccumulate(MULTIPLE_ADD+fixes.length);
           before++;
           date = DateView.getYesterDate(before);
           logger.d(date == last);

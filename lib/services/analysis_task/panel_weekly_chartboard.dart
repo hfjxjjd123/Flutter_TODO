@@ -17,14 +17,15 @@ class WeeklyChartBoard extends StatelessWidget {
     int weekday = DateView.getWeekday();
 
 
+    double result = 0;
+
     for(int i=0; i<weekday; i++){
-      double result = 0;
       result += tmpIn[35-weekday+i];
       tmpInWeekly[3] = result/weekday;
     } //이번주 로직구현
 
     for(int i=0; i<3; i++){
-      double result = 0;
+      result = 0;
       for(int j=0; j<7; j++){
         result += tmpIn[14-weekday+7*i+j];
       }

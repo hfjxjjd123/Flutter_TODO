@@ -1,95 +1,82 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:secare/test/test_screen.dart';
 import '../const/mid.dart';
 import '../data/profile_model.dart';
 import '../data/task_model.dart';
 
 class ProfileService{
-  static Future<ProfileModel> readProfile() async{
 
-    DocumentReference<Map<String,dynamic>> documentReference =  FirebaseFirestore.instance
-        .collection(MID).doc("Profile");
+  static Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
 
-    DocumentSnapshot<Map<String, dynamic>> snapshot = await documentReference.get();
-
-    if(!snapshot.exists){
-      logger.d("그런거 없습니다");
-    }
-    ProfileModel profileModel = ProfileModel.fromSnapshot(snapshot);
-    return profileModel;
+    return directory.path;
   }
 
-  static Future updateProfile(ProfileModel profileModel) async{
-    DocumentReference<Map<String, dynamic>> taskDocReference = FirebaseFirestore.instance
-        .collection(MID).doc("Profile");
-
-    final DocumentSnapshot documentSnapshot = await taskDocReference.get();
-
-    if(!documentSnapshot.exists){
-      await taskDocReference.set(profileModel.toJson());
-    }
+  static Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/fixed.txt');
   }
+
 
   static Future<List<String>> readFixedTaskInProfile() async {
+    final file = await _localFile;
     List<String> fixes = [];
 
-    CollectionReference<Map<String, dynamic>> taskColReference = FirebaseFirestore.instance
-        .collection(MID).doc("Profile")
-        .collection("FixedTasks");
-
-    final QuerySnapshot<Map<String, dynamic>> snapshot = await taskColReference.get();
-
-    for(DocumentSnapshot documentSnapshot in snapshot.docs){
-      fixes.add(documentSnapshot.id);
+    try{
+      fixes = json.decode(await file.readAsString()).toList();
+    } catch(e){
+      logger.d("No fixes in profle");
     }
 
     return fixes;
   }
 
-  static Future addFixedTaskToProfile(String todo) async{
-    TaskModelForProfile taskModelForProfile = TaskModelForProfile(todo: todo);
+  static Future<File> addFixedTaskToProfile(String todo) async{
+    final file = await _localFile;
+    List<String> fixes = [];
 
-    DocumentReference<Map<String, dynamic>> taskDocReference = FirebaseFirestore.instance
-        .collection(MID).doc("Profile")
-        .collection("FixedTasks").doc(taskModelForProfile.todo);
+    try{
+      fixes = json.decode(await file.readAsString());
+      fixes.add(todo);
+      logger.d("thispoint!!"+fixes.toString());
+    } catch(e){
 
-    final DocumentSnapshot documentSnapshot = await taskDocReference.get();
-
-    if(!documentSnapshot.exists){
-      await taskDocReference.set(taskModelForProfile.toJson());
-    } else{
-      await taskDocReference.update(taskModelForProfile.toJson());
+      fixes.add(todo);
     }
+    return file.writeAsString(fixes.toString());
   }
 
-  static Future deleteFixedTaskToProfile(TaskModelForProfile taskModelForProfile) async{
-    DocumentReference<Map<String, dynamic>> taskDocReference = FirebaseFirestore.instance
-        .collection(MID).doc("Profile")
-        .collection("FixedTasks").doc(taskModelForProfile.todo);
+  static Future<File> deleteFixedTaskToProfile(TaskModelForProfile taskModelForProfile) async{
 
-    final DocumentSnapshot documentSnapshot = await taskDocReference.get();
+    List<String> list = [];
+    final file = await _localFile;
 
-    if(documentSnapshot.exists){
-      await taskDocReference.delete();
-    } else{
-      logger.d("NONE");
+    try {
+      // 파일 읽기
+      list = json.decode(await file.readAsString()).toList();
+      for(String fixes in list) {
+        if (fixes == taskModelForProfile.todo) {
+          list.remove(fixes);
+          break;
+        }
+      }
+    } catch(e){
+      logger.d("이니셜 에러");
     }
+
+    return file.writeAsString(json.encode(list.toString()));
   }
 
-
-
-  // static Future updateAchievement(AchieveModel achieveModel) async{
-  //   DocumentReference<Map<String, dynamic>> TaskDocReference = FirebaseFirestore.instance
-  //       .collection(MID).doc("Proflie")
-  //       .collection('Achievement').doc(achieveModel.name);
-  //
-  //   final DocumentSnapshot documentSnapshot = await TaskDocReference.get();
-  //
-  //   if(!documentSnapshot.exists){
-  //     logger.d("not exist!"); // 수정요함
-  //   } else {
-  //     await TaskDocReference.update(achieveModel.toJson());
-  //   }
-  // }
-
+  static Future deleteFile() async {
+    try {
+      final file = await _localFile;
+      await file.delete();
+    } catch (e) {
+      return 0;
+    }
+  }
 }

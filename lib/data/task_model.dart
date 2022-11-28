@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// todo : "todo"
@@ -51,6 +53,7 @@ class TaskModelForProfile {
     return map;
   }
 
+  TaskModelForProfile.fromStringData(String data) :this.fromJson(json.decode(data));
   TaskModelForProfile.fromSnapshot(DocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data()!);
   TaskModelForProfile.fromQuerySnapshot(QueryDocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data());
 

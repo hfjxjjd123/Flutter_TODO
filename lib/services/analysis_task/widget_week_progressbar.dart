@@ -40,7 +40,7 @@ class WeekProgressBarNow extends StatelessWidget {
             color: (progress == 0)? fadeColor:onColor,
           ),
         ),
-        Text("this week",style: TextStyle(color: Colors.white, fontSize: 12),)
+        Text("this week",style: TextStyle(color: Colors.white, fontSize: 10, fontFamily: 'SongMyung'),)
       ],
     );
   }

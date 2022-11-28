@@ -1,13 +1,19 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:secare/repo/analysis_service_accumulate.dart';
 import 'package:secare/repo/analysis_service_daily.dart';
 import 'package:secare/test/test_screen.dart';
 import '../const/mid.dart';
 import '../data/task_model.dart';
+import 'analysis_accumulate.dart';
+import 'analysis_daily.dart';
+import 'analysis_fixed.dart';
 import 'analysis_service_fixed.dart';
 
 class DTaskService{
   static Future writeTask(TaskModel taskModel) async{
+    logger.d("Why? 왜 안돼? ${taskModel.todo}");
     DocumentReference<Map<String, dynamic>> taskDocReference = FirebaseFirestore.instance
         .collection(MID).doc("DailyTask")
         .collection('tasks').doc(taskModel.todo);
@@ -36,6 +42,9 @@ class DTaskService{
   }
 
   static Future updateTaskDone(String todo) async{
+
+    logger.d("updateTaskDone() 호출");
+
     DocumentReference<Map<String, dynamic>> TaskDocReference = FirebaseFirestore.instance
         .collection(MID).doc("DailyTask")
         .collection('tasks').doc(todo);
@@ -51,7 +60,7 @@ class DTaskService{
 
       int stat = (taskModel.isDone)?4:3;
       await AnalysisServiceDaily.updateAnalysisDaily(stat);
-      await AnalysisServiceAccumulate.updateAnalysisAccumulate(stat);
+      await AnalysisAccumulate.updateAnalysisAccumulate(stat);
 
       if(taskModel.isFixed == true){
         await AnalysisServiceFixed.updateAnalysisFixed(todo, stat);
@@ -80,10 +89,10 @@ class DTaskService{
     return tasks;
   }
 
-  static Future<void> deleteTask(TaskModel taskModel) async{
+  static Future<void> deleteTask(String todo) async{
     DocumentReference<Map<String, dynamic>> docReference = FirebaseFirestore.instance
         .collection(MID).doc("DailyTask")
-        .collection('tasks').doc(taskModel.todo);
+        .collection('tasks').doc(todo);
 
     final DocumentSnapshot documentSnapshot = await docReference.get();
 

@@ -18,7 +18,7 @@ class WidgetBadges extends StatelessWidget {
       children: [
         Icon(Icons.local_fire_department, color: Colors.red,size: SIZE.width*0.08,),
         Container(width: SIZE.width * 0.03,),
-        Text('7+',style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: SIZE.width*0.05),),
+        Text('14+',style: Theme.of(context).textTheme.headline6!.copyWith(fontSize: SIZE.width*0.05),),
         Container(width: SIZE.width * 0.03,),
         Icon(Icons.nightlight, color: Colors.amber,size: SIZE.width*0.08,),
       ],

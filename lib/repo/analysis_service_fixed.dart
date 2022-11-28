@@ -87,4 +87,18 @@ class AnalysisServiceFixed{
 
     return fixes;
   }
+
+  static Future deleteAnalysisFixed(String todo) async{
+    DocumentReference<Map<String, dynamic>> taskDocReference = FirebaseFirestore.instance
+        .collection(MID).doc("Analysis")
+        .collection("Fixed").doc(todo);
+
+    final DocumentSnapshot documentSnapshot = await taskDocReference.get();
+
+    if(documentSnapshot.exists){
+      await taskDocReference.delete();
+    } else{
+      logger.d("NONE");
+    }
+  }
 }

@@ -1,7 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:secare/data/daily_analysis_model.dart';
+import 'package:secare/test/test_screen.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../const/size.dart';
+import '../../repo/analysis_daily.dart';
 import '../../repo/analysis_service_daily.dart';
 import 'panel_daily_chartboard.dart';
 import 'panel_weekly_chartboard.dart';
@@ -18,14 +22,20 @@ class PanelReport extends StatelessWidget {
       future: AnalysisServiceDaily.readDaysProgress(),
       builder: (context, snapshot) {
         if(snapshot.hasData) {
+          int snapshotLength = snapshot.data!.length;
+
           tmpIn = List<double>.filled(35, 0);
           double progress = 0.0;
           DailyAnalysisModel model;
 
-          for(int i=0; i<snapshot.data!.length; i++){
-            model = snapshot.data![i];
-            progress = (model.allCounter !=0)? model.doneCounter/model.allCounter: 0.0;
-            tmpIn[35-snapshot.data!.length+i] = progress;
+
+          int maxLength = (snapshotLength>35)? 35: snapshotLength;
+          List<DailyAnalysisModel> list = snapshot.data!.sublist(snapshotLength - maxLength ,snapshotLength);
+
+          for(int i=0; i<maxLength; i++){
+            model = list[i];
+            progress = (model.allCounter !=0 && model.doneCounter>=0)? model.doneCounter/model.allCounter: 0.0;
+            tmpIn[35-maxLength+i] = progress;
           }
 
           return SlidingUpPanel(

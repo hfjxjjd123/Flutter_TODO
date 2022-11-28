@@ -21,7 +21,7 @@ class DailyChartBoard extends StatelessWidget {
                 child: DailyCharts(tmpIn),
         ),
         Positioned(
-            child: Text("Today", style: TextStyle(fontSize: 10),),
+            child: Text("Today", style: TextStyle(fontSize: 10, fontFamily: 'SongMyung'),),
           left: SIZE.width*0.755,
           top: SIZE. height*0.29,
         )

@@ -4,6 +4,8 @@ import 'package:secare/data/fixed_analysis_model.dart';
 import 'package:secare/repo/analysis_service_fixed.dart';
 import 'package:secare/test/test_screen.dart';
 
+import '../../repo/analysis_fixed.dart';
+
 class ListFixedTaskProgress extends StatelessWidget {
   ListFixedTaskProgress({Key? key}) : super(key: key);
 
@@ -86,7 +88,9 @@ class ListFixedTaskProgress extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: Center(
-                          child: Text(task3[index], style: Theme
+                          child: Text(task3[index],
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme
                               .of(context)
                               .textTheme
                               .headline4,),
@@ -107,7 +111,12 @@ class ListFixedTaskProgress extends StatelessWidget {
             ),
           );
         } else{
-          return Container();
+          return Column(
+            children: [
+              columnBigPadding(),
+              CircularProgressIndicator(color: Colors.white70,),
+            ],
+          );
           // return Shimmer();
         }
         //가장 큰 3개 정렬.
