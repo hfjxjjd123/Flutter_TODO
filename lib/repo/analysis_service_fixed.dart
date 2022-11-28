@@ -22,7 +22,6 @@ class AnalysisServiceFixed{
     if(!documentSnapshot.exists){
       await analDocReference.set(fixedAnalysisModel.toJson());
     } else{
-      logger.d("already exist!");
     }
   }
 

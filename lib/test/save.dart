@@ -48,6 +48,8 @@ class DayScreenState extends State<DayScreen> {
   @override
   Widget build(BuildContext context) {
 
+    // ProfileService.deleteFile();
+
     List<Widget> fixedTasks = [];
     List<Widget> tasks = [];
     List<String> fTodo = [];

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:path_provider/path_provider.dart';
@@ -27,7 +28,7 @@ class ProfileService{
     List<String> fixes = [];
 
     try{
-      fixes = json.decode(await file.readAsString()).toList();
+      fixes = (await file.readAsString()).replaceAll('[','').replaceAll(']','').split(', ');
     } catch(e){
       logger.d("No fixes in profle");
     }
@@ -40,13 +41,18 @@ class ProfileService{
     List<String> fixes = [];
 
     try{
-      fixes = json.decode(await file.readAsString());
+      fixes = (await file.readAsString()).replaceAll('[','').replaceAll(']','').split(', ');
+      logger.d("before\n"+fixes.toString());
+      if(fixes.length == 1 && fixes[0]==""){
+        fixes = [];
+      }
       fixes.add(todo);
-      logger.d("thispoint!!"+fixes.toString());
     } catch(e){
 
       fixes.add(todo);
     }
+    logger.d("after\n"+fixes.toString());
+
     return file.writeAsString(fixes.toString());
   }
 
@@ -57,7 +63,7 @@ class ProfileService{
 
     try {
       // 파일 읽기
-      list = json.decode(await file.readAsString()).toList();
+      list = (await file.readAsString()).replaceAll('[','').replaceAll(']','').split(', ');
       for(String fixes in list) {
         if (fixes == taskModelForProfile.todo) {
           list.remove(fixes);
@@ -68,7 +74,7 @@ class ProfileService{
       logger.d("이니셜 에러");
     }
 
-    return file.writeAsString(json.encode(list.toString()));
+    return file.writeAsString(list.toString());
   }
 
   static Future deleteFile() async {
