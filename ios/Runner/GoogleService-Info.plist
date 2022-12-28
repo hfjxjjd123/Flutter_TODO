@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>513489434208-hej7v2bg367s7erc0a842jbc21r63qim.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.513489434208-hej7v2bg367s7erc0a842jbc21r63qim</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>513489434208-u51d3fi1pa3krn2drs646q31nglqbq6c.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyChD5llk8pBjZA0AULLtlE1eGo8RPwBt-4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>513489434208</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.secare</string>
+	<key>PROJECT_ID</key>
+	<string>selfcareapp-b4b72</string>
+	<key>STORAGE_BUCKET</key>
+	<string>selfcareapp-b4b72.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:513489434208:ios:36db901e9099008973f505</string>
+</dict>
+</plist>

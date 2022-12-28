@@ -67,6 +67,7 @@ class DayScreenState extends State<DayScreen> {
           builder: (context, snapshot) {
             
             if (snapshot.hasData) {
+              logger.d("check!!! It really is");
               fixedTasks.clear();
               tasks.clear();
               fTodo.clear();
@@ -143,6 +144,7 @@ class DayScreenState extends State<DayScreen> {
               );
             }
             else{
+              logger.d("check what if??");
               return Container(
                 child: Center(
                   child: CircularProgressIndicator(

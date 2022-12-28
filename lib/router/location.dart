@@ -29,6 +29,7 @@ class DayLocation extends BeamLocation{
                   UidService.writeDeviceInfo(mid);
                   MID = mid;
                   logger.d("created mid = $mid");
+
                 }
               }else{
                 return Container();
