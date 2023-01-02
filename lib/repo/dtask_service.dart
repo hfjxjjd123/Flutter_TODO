@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:secare/repo/analysis_fixed.dart';
 import 'package:secare/repo/analysis_service_daily.dart';
 import 'package:secare/test/test_screen.dart';
 import '../const/mid.dart';
@@ -60,7 +61,7 @@ class DTaskService{
       await AnalysisAccumulate.updateAnalysisAccumulate(stat);
 
       if(taskModel.isFixed == true){
-        await AnalysisServiceFixed.updateAnalysisFixed(todo, stat);
+        // await AnalysisFixed.updateAnalysisFixed(todo, stat);
       }
     }
   }

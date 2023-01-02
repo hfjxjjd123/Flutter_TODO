@@ -2,6 +2,7 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:secare/const/colors.dart';
+import 'package:secare/repo/analysis_fixed.dart';
 import 'package:secare/repo/analysis_service_fixed.dart';
 import 'package:secare/repo/dtask_service.dart';
 import 'package:secare/repo/profile_service.dart';
@@ -172,7 +173,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                       await AnalysisServiceDaily.updateAnalysisDaily(DELETE_DO + ((fOn[index])?1:0));
                                       await AnalysisAccumulate.updateAnalysisAccumulate(DELETE_DO + ((fOn[index])?1:0));
 
-                                      await AnalysisServiceFixed.deleteAnalysisFixed(fTodo[index].key);
+                                      await AnalysisFixed.deleteAnalysisFixed(fTodo[index].key);
                                       await ProfileService.deleteFixedTaskToProfile(TaskModelForProfile(todo: fTodo[index].todo));
 
                                       await DTaskService.deleteTask(fTodo[index].key);

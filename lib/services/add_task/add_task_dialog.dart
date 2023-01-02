@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:secare/const/colors.dart';
 import 'package:secare/const/fetching_analysis_flag.dart';
 import 'package:secare/const/size.dart';
+import 'package:secare/repo/analysis_fixed.dart';
 import 'package:secare/repo/analysis_service_daily.dart';
 import 'package:secare/repo/analysis_service_fixed.dart';
 import 'package:secare/repo/profile_service.dart';
@@ -133,7 +134,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
 
                       if(isFixedTask){
                         await ProfileService.addFixedTaskToProfile(taskModel.todo);
-                        await AnalysisServiceFixed.updateAnalysisFixed(taskModel.todo, ADD_NEW);
+                        await AnalysisFixed.updateAnalysisFixed(taskModel, ADD_NEW);
                       }
                       widget.notifyParent();
                       Navigator.pop(context);

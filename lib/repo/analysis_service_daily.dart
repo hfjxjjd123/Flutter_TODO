@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:secare/repo/analysis_fixed.dart';
 import 'package:secare/repo/analysis_service_fixed.dart';
 import 'package:secare/repo/dtask_service.dart';
 import 'package:secare/repo/profile_service.dart';
@@ -92,7 +93,7 @@ class AnalysisServiceDaily{ //Firebase 이용하기로 했음 directory issue
           todo: fixedTask,
           isFixed: true
         );
-        await AnalysisServiceFixed.updateAnalysisFixed(taskModel.todo, ADD_NEW);
+        await AnalysisFixed.updateAnalysisFixed(taskModel, ADD_NEW);
         await DTaskService.writeTask(taskModel);
         await updateAnalysisDaily(ADD_NEW);
       }
@@ -157,7 +158,7 @@ class AnalysisServiceDaily{ //Firebase 이용하기로 했음 directory issue
         while(last != date){
           DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(date: date,allCounter: fixes.length,doneCounter: 0);//
           await initAnalysisDaily(dailyAnalysisModel);
-          await AnalysisServiceFixed.updateAnalysisFixed(taskModel.todo, MULTIPLE_ADD+fixes.length); //
+          await AnalysisFixed.updateAnalysisFixed(taskModel, MULTIPLE_ADD+fixes.length); //
           await AnalysisAccumulate.updateAnalysisAccumulate(MULTIPLE_ADD+fixes.length);
           before++;
           date = DateView.getYesterDate(before);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:secare/const/size.dart';
 import 'package:secare/data/fixed_analysis_model.dart';
+import 'package:secare/repo/analysis_fixed.dart';
 import 'package:secare/repo/analysis_service_fixed.dart';
 import 'package:secare/test/test_screen.dart';
 
@@ -14,7 +15,7 @@ class ListFixedTaskProgress extends StatelessWidget {
 
 
     return FutureBuilder<List<FixedAnalysisModel>>(
-      future: AnalysisServiceFixed.readFixedProgress(),
+      future: AnalysisFixed.readFixedProgress(),
       builder: (context, snapshot) {
         List<String> tasks = [];
         List<double> pro = [];
