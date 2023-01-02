@@ -11,9 +11,6 @@ import '../../const/size.dart';
 import '../../data/profile_model.dart';
 import '../../data/task_model.dart';
 import '../../repo/analysis_accumulate.dart';
-import '../../repo/analysis_daily.dart';
-import '../../repo/analysis_fixed.dart';
-import '../../repo/analysis_service_accumulate.dart';
 import '../../repo/analysis_service_daily.dart';
 import '../../repo/profile_edit_service.dart';
 
@@ -152,12 +149,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     future: DTaskService.readTasks(),
                     builder: (context, snapshot) {
                       if(snapshot.hasData){
-                        List<String> fTodo = [];
+                        List<TaskModel> fTodo = [];
                         List<bool> fOn = [];
 
                         for (int i = 0; i < snapshot.data!.length; i++) {
                           if (snapshot.data![i].isFixed) {
-                            fTodo.add(snapshot.data![i].todo);
+                            fTodo.add(snapshot.data![i]);
                             fOn.add(snapshot.data![i].isDone);
                           }
                         }
@@ -175,10 +172,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                       await AnalysisServiceDaily.updateAnalysisDaily(DELETE_DO + ((fOn[index])?1:0));
                                       await AnalysisAccumulate.updateAnalysisAccumulate(DELETE_DO + ((fOn[index])?1:0));
 
-                                      await AnalysisServiceFixed.deleteAnalysisFixed(fTodo[index]);
-                                      await ProfileService.deleteFixedTaskToProfile(TaskModelForProfile(todo: fTodo[index]));
+                                      await AnalysisServiceFixed.deleteAnalysisFixed(fTodo[index].key);
+                                      await ProfileService.deleteFixedTaskToProfile(TaskModelForProfile(todo: fTodo[index].todo));
 
-                                      await DTaskService.deleteTask(fTodo[index]);
+                                      await DTaskService.deleteTask(fTodo[index].key);
                                       setState((){});
                                     },
                                     backgroundColor: Colors.red,
@@ -203,7 +200,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                       Expanded(
                                         child: Center(
                                           child: Text(
-                                            fTodo[index],
+                                            fTodo[index].todo,
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 fontFamily: "SongMyung",

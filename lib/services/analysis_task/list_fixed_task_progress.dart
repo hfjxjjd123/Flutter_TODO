@@ -4,8 +4,6 @@ import 'package:secare/data/fixed_analysis_model.dart';
 import 'package:secare/repo/analysis_service_fixed.dart';
 import 'package:secare/test/test_screen.dart';
 
-import '../../repo/analysis_fixed.dart';
-
 class ListFixedTaskProgress extends StatelessWidget {
   ListFixedTaskProgress({Key? key}) : super(key: key);
 

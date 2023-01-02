@@ -1,6 +1,10 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'package:secare/repo/create_directory.dart';
+import 'package:secare/test/test_screen.dart';
 import 'package:uuid/uuid.dart';
+
+//done
 
 class UidService{
   static Future<String> get _localPath async {
@@ -20,6 +24,9 @@ class UidService{
 
       // 파일 읽기
       String uid = await file.readAsString();
+
+      logger.d(file.path);
+
       return uid;
     } catch (e) {
       return "not found";

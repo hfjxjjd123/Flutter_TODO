@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:secare/repo/analysis_service_accumulate.dart';
 import 'package:secare/repo/analysis_service_fixed.dart';
 import 'package:secare/repo/dtask_service.dart';
 import 'package:secare/repo/profile_service.dart';
@@ -10,9 +9,8 @@ import '../const/mid.dart';
 import '../data/daily_analysis_model.dart';
 import '../data/task_model.dart';
 import 'analysis_accumulate.dart';
-import 'analysis_fixed.dart';
 
-class AnalysisServiceDaily{ //done. Firebase 이용하기로 했음 directory issue
+class AnalysisServiceDaily{ //Firebase 이용하기로 했음 directory issue
 
   //when you first signUp
   static Future initAnalysisDaily(DailyAnalysisModel dailyAnalysisModel) async{

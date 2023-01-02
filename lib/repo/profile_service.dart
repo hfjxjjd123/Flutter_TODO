@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:path_provider/path_provider.dart';
@@ -8,6 +6,8 @@ import 'package:secare/test/test_screen.dart';
 import '../const/mid.dart';
 import '../data/profile_model.dart';
 import '../data/task_model.dart';
+
+//done
 
 class ProfileService{
 
@@ -30,7 +30,7 @@ class ProfileService{
     try{
       fixes = (await file.readAsString()).replaceAll('[','').replaceAll(']','').split(', ');
     } catch(e){
-      logger.d("No fixes in profle");
+      logger.d("No fixes in profile");
     }
 
     return fixes;

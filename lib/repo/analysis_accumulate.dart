@@ -8,6 +8,8 @@ import '../const/fetching_analysis_flag.dart';
 import '../const/mid.dart';
 import '../data/accumulate_analysis_model.dart';
 
+//done
+
 class AnalysisAccumulate{
 
   static Future<String> get _localPath async {
@@ -46,7 +48,6 @@ class AnalysisAccumulate{
       // 파일 읽기
       return file.writeAsString(json.encode(AccumulateAnalysisModel().toJson()));
   }
-
 
   static Future<File> updateAnalysisAccumulate(int stat) async{
       final file = await _localFile;
@@ -88,33 +89,5 @@ class AnalysisAccumulate{
 
         return file.writeAsString(json.encode(accumulateAnalysisModel.toJson()));
 
-  }
-
-  static Future<double> readAccumulateProgress() async{
-
-    double progress;
-
-    DocumentReference<Map<String,dynamic>> documentReference =  FirebaseFirestore.instance
-        .collection(MID).doc("Analysis")
-        .collection("Accumulate").doc("accumulate");
-
-    DocumentSnapshot<Map<String, dynamic>> snapshot = await documentReference.get();
-
-    if(!snapshot.exists){
-      logger.d("error!");
-      return 0.0;
-    } else{
-      AccumulateAnalysisModel accumulateAnalysisModel = AccumulateAnalysisModel.fromSnapshot(snapshot);
-
-      int done = accumulateAnalysisModel.doneCounter;
-      int all = accumulateAnalysisModel.allCounter;
-      if(all != 0){
-        progress  = done/all;
-      } else {
-        progress = 0;
-      }
-
-      return progress;
-    }
   }
 }

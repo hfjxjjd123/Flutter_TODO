@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:secare/data/stuff_model.dart';
-import 'package:secare/provider/onclick_notifier.dart';
-import 'package:secare/repo/stuff_service.dart';
-import 'package:secare/widgets/datetime_widget.dart';
 
 import '../const/size.dart';
 

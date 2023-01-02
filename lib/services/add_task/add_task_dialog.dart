@@ -5,15 +5,10 @@ import 'package:secare/const/size.dart';
 import 'package:secare/repo/analysis_service_daily.dart';
 import 'package:secare/repo/analysis_service_fixed.dart';
 import 'package:secare/repo/profile_service.dart';
-import 'package:secare/test/test_screen.dart';
 
 import '../../data/task_model.dart';
 import '../../repo/analysis_accumulate.dart';
-import '../../repo/analysis_daily.dart';
-import '../../repo/analysis_fixed.dart';
-import '../../repo/analysis_service_accumulate.dart';
 import '../../repo/dtask_service.dart';
-import '../../test/save.dart';
 
 class AddTaskDialog extends StatefulWidget {
   final Function() notifyParent;

@@ -20,40 +20,55 @@ class ProfileScreen extends StatelessWidget {
           children: [
             Container(
               color: offColor,
-              child: Column(
-                children: [
-                  Container(
-                    width: SIZE.width,
-                    height: SIZE.height*0.12,
-                    color: Colors.transparent,
-                  ),
-                  WidgetName(),// name panel
-                  WidgetBadges(), // badge panel
-                  Container(height: SIZE.height*0.03,),
-                  WidgetTotalProgresser(),//progresser
-                  Container(height: SIZE.height * 0.03,),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: ListFixedTaskProgress(),
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        FloatingActionButton(
+                          elevation: 0,
+                          heroTag: "b1",
+                          onPressed: () {
+                            Beamer.of(context).beamBack();
+                            },
+                          backgroundColor: Colors.transparent,
+                                  child: const Icon(Icons.arrow_back_ios, color: Colors.white,),
+                        ),
+                        Expanded(child: Container()),
+                        FloatingActionButton(
+                          elevation: 0,
+                          heroTag: "b2",
+                          onPressed: () {
+                            Beamer.of(context).beamToNamed('/profile_edit');
+                          },
+                          backgroundColor: Colors.transparent,
+                          child: const Icon(Icons.edit, color: Colors.white,),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      width: SIZE.width,
+                      height: SIZE.height*0.03,
+                      color: Colors.transparent,
+                    ),
+                    WidgetName(),// name panel
+                    WidgetBadges(), // badge panel
+                    Container(height: SIZE.height*0.03,),
+                    WidgetTotalProgresser(),//progresser
+                    Container(height: SIZE.height * 0.03,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: ListFixedTaskProgress(),
 
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ),
             PanelReport(),
           ],
         ),
-        floatingActionButton: Align(
-          alignment: Alignment(1 , -0.86),
-          child: FloatingActionButton(
-            elevation: 0,
-            onPressed: () {
-              Beamer.of(context).beamToNamed('/profile_edit');
-            },
-            backgroundColor: Colors.transparent,
-            child: const Icon(Icons.edit, color: Colors.white,),
-          ),
-        ),
+
       ),
     );
   }

@@ -5,7 +5,6 @@ import 'package:secare/data/daily_analysis_model.dart';
 import 'package:secare/test/test_screen.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../const/size.dart';
-import '../../repo/analysis_daily.dart';
 import '../../repo/analysis_service_daily.dart';
 import 'panel_daily_chartboard.dart';
 import 'panel_weekly_chartboard.dart';

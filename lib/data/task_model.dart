@@ -1,15 +1,23 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// todo : "todo"
 /// isDone : "isDone"
 /// isFixed : "isFixed"
+/// key: "key"
+Random _rnd = Random();
+
+const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+String generateRandomString(int length) => String.fromCharCodes(Iterable.generate(
+    length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
 class TaskModel {
   late String todo;
   late bool isFixed;
   bool isDone = false;
+  String key = generateRandomString(10);
 
   TaskModel({
     required this.todo,
@@ -20,6 +28,7 @@ class TaskModel {
     todo = json['todo'];
     isDone = json['isDone'];
     isFixed = json['isFixed'];
+    key = json['key'];
   }
 
 
@@ -28,6 +37,7 @@ class TaskModel {
     map['todo'] = todo;
     map['isDone'] = isDone;
     map['isFixed'] = isFixed;
+    map['key'] = key;
     return map;
   }
 

@@ -25,6 +25,12 @@ class DateView extends StatelessWidget {
     var strToday = formatter.format(now);
     return strToday;
   }
+  static String getDate2(){
+    DateTime now = DateTime.now();
+    DateFormat formatter = DateFormat('yyyyMMdd');
+    var strToday = formatter.format(now);
+    return strToday;
+  }
 
   static String getYesterDate(int n){
     DateTime yes = DateTime.now().subtract(Duration(days: n));
@@ -32,6 +38,14 @@ class DateView extends StatelessWidget {
     var strYesterday = formatter.format(yes);
     return strYesterday;
   }
+
+  static String getYesterDate2(int n){
+    DateTime yes = DateTime.now().subtract(Duration(days: n));
+    DateFormat formatter = DateFormat('yyyyMMdd');
+    var strYesterday = formatter.format(yes);
+    return strYesterday;
+  }
+
 
   static int getWeekday(){
     DateTime now = DateTime.now();

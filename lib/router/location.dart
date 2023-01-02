@@ -1,9 +1,11 @@
 import 'package:beamer/beamer.dart';
+import 'package:secare/const/home_directory.dart';
 import 'package:secare/const/mid.dart';
+import 'package:secare/repo/get_homedir.dart';
 import 'package:secare/repo/uid_service.dart';
 import 'package:flutter/material.dart';
+import 'package:secare/screens/day_screen.dart';
 import 'package:secare/services/profile/screen_profile_edit.dart';
-import 'package:secare/test/save.dart';
 import 'package:secare/test/test_screen.dart';
 
 import '../const/size.dart';
@@ -16,29 +18,8 @@ class DayLocation extends BeamLocation{
 
     return [
       BeamPage(
-          child: FutureBuilder<String>(
-            future: UidService.readDeviceInfo(),
-            builder: (context, snapshot) {
-              if(snapshot.hasData){
-                if(snapshot.data != "not found"){
-                  logger.d(snapshot.data!);
-                  MID = snapshot.data!;
-                }else{
-                  logger.d("User 생성!! // 1번만해야돼");
-                  String mid = UidService.createUID();
-                  UidService.writeDeviceInfo(mid);
-                  MID = mid;
-                  logger.d("created mid = $mid");
-
-                }
-              }else{
-                return Container();
-              }
-
-              return DayScreen();
-            }
-          ),
-          key: ValueKey('day')
+          child: DayScreen(),
+          key: const ValueKey('day')
       ),
     ];
   }
@@ -55,7 +36,7 @@ class ProfileLocation extends BeamLocation{
     return [
     BeamPage(
         child: ProfileScreen(),
-        key: ValueKey('profile')
+        key: const ValueKey('profile')
     ),
     ];
   }
@@ -72,7 +53,7 @@ class ProfileEditLocation extends BeamLocation{
     return [
       BeamPage(
           child: ProfileEditScreen(),
-          key: ValueKey('profile_edit')
+          key: const ValueKey('profile_edit')
       ),
     ];
   }
