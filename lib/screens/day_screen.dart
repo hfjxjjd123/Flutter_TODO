@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:secare/const/fetching_analysis_flag.dart';
 import 'package:secare/const/size.dart';
 import 'package:secare/const/colors.dart';
+import 'package:secare/repo/analysis_daily.dart';
 import 'package:secare/repo/analysis_service_daily.dart';
 import 'package:secare/repo/dtask_service.dart';
 import 'package:secare/repo/profile_service.dart';
@@ -50,8 +51,8 @@ class DayScreenState extends State<DayScreen> {
 
     List<Widget> fixedTasks = [];
     List<Widget> tasks = [];
-    List<String> fTodo = [];
-    List<String> dTodo = [];
+    List<TaskModel> fTodo = [];
+    List<TaskModel> dTodo = [];
     List<bool> fOn = [];
     List<bool> dOn = [];
 
@@ -74,13 +75,13 @@ class DayScreenState extends State<DayScreen> {
 
               for (int i = 0; i < snapshot.data!.length; i++) {
                 if (snapshot.data![i].isFixed) {
-                  fTodo.add(snapshot.data![i].todo);
+                  fTodo.add(snapshot.data![i]);
                   fOn.add(snapshot.data![i].isDone);
                   fixedTasks.add(
                     OnButton(stuff: snapshot.data![i].todo),
                   );
                 } else {
-                  dTodo.add(snapshot.data![i].todo);
+                  dTodo.add(snapshot.data![i]);
                   dOn.add(snapshot.data![i].isDone);
                   tasks.add(
                     Slidable(
@@ -90,11 +91,11 @@ class DayScreenState extends State<DayScreen> {
                         children: [
                           SlidableAction(
                             onPressed: (context) async{
-                              int index = dTodo.indexOf(snapshot.data![i].todo);
-                              await AnalysisServiceDaily.updateAnalysisDaily(DELETE_DO + ((dOn[index])?1:0));
+                              int index = dTodo.indexOf(snapshot.data![i]);
+                              await AnalysisDaily.updateAnalysisDaily(DELETE_DO + ((dOn[index])?1:0));
                               await AnalysisAccumulate.updateAnalysisAccumulate(DELETE_DO + ((dOn[index])?1:0));
 
-                              await DTaskService.deleteTask(dTodo[index]);
+                              await DTaskService.deleteTask(dTodo[index].key);
                               refresh();
                             },
                             backgroundColor: Colors.red,

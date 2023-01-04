@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
+import 'package:secare/data/task_model.dart';
 import 'package:secare/test/test_screen.dart';
 
 import '../../const/colors.dart';
@@ -26,8 +27,8 @@ class DayColumn extends StatefulWidget {
   List<bool> onList;
   List<Widget> fixedTasks;
   List<Widget> tasks;
-  List<String> fTodo;
-  List<String> dTodo;
+  List<TaskModel> fTodo;
+  List<TaskModel> dTodo;
   List<bool> fOn;
   List<bool> dOn;
 

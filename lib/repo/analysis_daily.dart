@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:secare/data/fixed_analysis_model.dart';
 import 'package:secare/repo/analysis_fixed.dart';
-import 'package:secare/repo/analysis_service_fixed.dart';
 import 'package:secare/repo/dtask_service.dart';
 import 'package:secare/repo/profile_service.dart';
 import 'package:secare/test/test_screen.dart';
@@ -28,7 +28,7 @@ class AnalysisDaily{ //Firebase 이용하기로 했음 directory issue
 
   static Future<File> get _localFile async {
     final path = await _localDirPath;
-    return File('$path/${DateView.getDate2()}.txt');
+    return File('$path/${DateView.getDate2()}');
   }
 
   static Future<File> initAnalysisDaily(DailyAnalysisModel dailyAnalysisModel) async{
@@ -40,23 +40,13 @@ class AnalysisDaily{ //Firebase 이용하기로 했음 directory issue
 
   static Future updateAnalysisDaily(int stat) async{
 
-    DocumentReference<Map<String, dynamic>> analDocReference = FirebaseFirestore.instance
-        .collection(MID).doc("Analysis")
-        .collection("Days").doc(DateView.getDate());
+    try {
+      final path = await _localFile;
+      File file = File('$path');
 
-    final DocumentSnapshot<Map<String, dynamic>> snapshot = await analDocReference.get();
-
-
-
-    if(!snapshot.exists){ //여기서 새로운 날짜가 업데이트가 되는데 ...
-      await lazyDaysAdd();
-
-      DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(date: DateView.getDate(), allCounter: 0, doneCounter: 0);
-      await initAnalysisDaily(dailyAnalysisModel);
-      await updateAnalysisDaily(stat);
-
-    } else{
-      DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel.fromSnapshot(snapshot);
+      // 데이터모델 읽어옴
+      DailyAnalysisModel dailyAnalysisModel =
+      DailyAnalysisModel.fromStringData(await file.readAsString());
 
       switch(stat){
         case ADD_NEW:{
@@ -80,7 +70,14 @@ class AnalysisDaily{ //Firebase 이용하기로 했음 directory issue
         default: break;
       }
 
-      await analDocReference.update(dailyAnalysisModel.toJson());
+      await file.writeAsString(json.encode(dailyAnalysisModel.toJson()));
+
+    }catch(e){
+      await lazyDaysAdd();
+
+      DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(date: DateView.getDate(), allCounter: 0, doneCounter: 0);
+      await initAnalysisDaily(dailyAnalysisModel);
+      await updateAnalysisDaily(stat);
     }
 
   }
@@ -151,7 +148,6 @@ class AnalysisDaily{ //Firebase 이용하기로 했음 directory issue
     logger.d("lazy update 실행됨");
     int before = 1;
     String date = DateView.getYesterDate2(before);
-    logger.d("yesterday: $date");
     String? last;
 
     List<String> fixes = await ProfileService.readFixedTaskInProfile(); //여기서도 날짜바뀜 감지
@@ -162,24 +158,44 @@ class AnalysisDaily{ //Firebase 이용하기로 했음 directory issue
           isFixed: true
       );
 
-      CollectionReference<Map<String,dynamic>> collectionReference =  FirebaseFirestore.instance
-          .collection(MID).doc("Analysis")
-          .collection('Days');
-      QuerySnapshot<Map<String, dynamic>> snapshots = await collectionReference.get();
+      List files = [];
+      List<String> days = [];
+      int length;
+      FixedAnalysisModel fixedAnalysisModel;
+      try {
+        String path = await _localDirPath;
+        files = Directory('$path/').listSync();
 
-      if(snapshots.size != 0){
-        last = DailyAnalysisModel.fromQuerySnapshot(snapshots.docs[snapshots.size-1]).date;
-        logger.d("last: $last");
-        while(last != date){
-          DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(date: date,allCounter: fixes.length,doneCounter: 0);//
-          await initAnalysisDaily(dailyAnalysisModel);
-          await AnalysisFixed.updateAnalysisFixed(taskModel, MULTIPLE_ADD+fixes.length); //
-          await AnalysisAccumulate.updateAnalysisAccumulate(MULTIPLE_ADD+fixes.length);
-          before++;
-          date = DateView.getYesterDate(before);
-          logger.d(date == last);
+        length = files.length;
+
+        for (int i = 0; i < length; i++) {
+          days.add(files[i].toString());
         }
+
+        print(days);
+        //sorting print
+
+        if(length != 0){
+          last = days[length-1];
+          logger.d("last: $last");
+          while(last != date){
+            DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(date: date,allCounter: fixes.length,doneCounter: 0);//
+            await initAnalysisDaily(dailyAnalysisModel);
+            await AnalysisFixed.updateAnalysisFixed(taskModel, MULTIPLE_ADD+fixes.length); //
+            await AnalysisAccumulate.updateAnalysisAccumulate(MULTIPLE_ADD+fixes.length);
+            before++;
+            date = DateView.getYesterDate2(before);
+            logger.d(date == last);
+          }
+        }
+
+      }catch (e){
+        logger.d("Serious err");
       }
+
+      //전체리스트업 부분.
+
+
 
       // 날짜별로 루프돌기
 

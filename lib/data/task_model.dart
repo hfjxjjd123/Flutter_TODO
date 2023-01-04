@@ -41,6 +41,7 @@ class TaskModel {
     return map;
   }
 
+  TaskModel.fromStringData(String data) :this.fromJson(json.decode(data));
   TaskModel.fromSnapshot(DocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data()!);
   TaskModel.fromQuerySnapshot(QueryDocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data());
 

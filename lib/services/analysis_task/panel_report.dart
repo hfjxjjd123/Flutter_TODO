@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:secare/data/daily_analysis_model.dart';
+import 'package:secare/repo/analysis_daily.dart';
 import 'package:secare/test/test_screen.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../const/size.dart';
@@ -18,7 +19,7 @@ class PanelReport extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return FutureBuilder<List<DailyAnalysisModel>>(
-      future: AnalysisServiceDaily.readDaysProgress(),
+      future: AnalysisDaily.readDaysProgress(),
       builder: (context, snapshot) {
         if(snapshot.hasData) {
           int snapshotLength = snapshot.data!.length;

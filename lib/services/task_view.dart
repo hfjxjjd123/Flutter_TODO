@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:secare/test/test_screen.dart';
+import 'package:secare/data/task_model.dart';
 
 import '../const/colors.dart';
 import '../const/size.dart';
-import '../repo/analysis_service_daily.dart';
 import '../repo/dtask_service.dart';
 
 class TaskView extends StatefulWidget {
@@ -24,8 +23,8 @@ class TaskView extends StatefulWidget {
   List<bool> onList;
   List<Widget> fixedTasks;
   List<Widget> tasks;
-  List<String> fTodo;
-  List<String> dTodo;
+  List<TaskModel> fTodo;
+  List<TaskModel> dTodo;
   List<bool> fOn;
   List<bool> dOn;
 
