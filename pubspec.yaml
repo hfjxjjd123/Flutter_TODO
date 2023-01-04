@@ -37,8 +37,6 @@ dependencies:
   intl: ^0.17.0
   provider: ^6.0.0
   beamer: ^0.14.1
-  dot_navigation_bar: ^1.0.1+4
-  flutter_expandable_fab: ^1.5.2
   logger: ^1.1.0
   sliding_up_panel: ^2.0.0+1
   liquid_progress_indicator: ^0.4.0

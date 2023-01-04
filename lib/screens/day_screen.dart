@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:beamer/beamer.dart';
-import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:path_provider/path_provider.dart';
