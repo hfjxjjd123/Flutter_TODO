@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-
 import 'package:secare/data/fixed_analysis_model.dart';
 import 'package:secare/repo/analysis_fixed.dart';
 import 'package:secare/repo/dtask_service.dart';
@@ -81,13 +80,15 @@ class AnalysisDaily {
         case READ:
           break;
         default:
+          {
+            dailyAnalysisModel.allCounter += stat - MULTIPLE_ADD;
+          }
           break;
       }
 
       await file.writeAsString(json.encode(dailyAnalysisModel.toJson()));
     } catch (e) {
       await lazyDaysAdd();
-      logger.d("next?");
 
       DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(
           date: DateView.getDate(), allCounter: 0, doneCounter: 0);
@@ -129,8 +130,11 @@ class AnalysisDaily {
         //이젠 다른 키에 접근하는 것이 아니므로 ADD_NEW로 실제 추가생성되진 않음
         await AnalysisFixed.updateAnalysisFixed(taskModel, ADD_NEW);
         await DTaskService.writeTask(taskModel);
-        await updateAnalysisDaily(ADD_NEW);
       }
+      await updateAnalysisDaily(MULTIPLE_ADD + fixes.length);
+      await AnalysisAccumulate.updateAnalysisAccumulate(
+          MULTIPLE_ADD + fixes.length);
+
       return 0.0;
     }
   }
@@ -156,7 +160,7 @@ class AnalysisDaily {
     return progresses;
   }
 
-  static Future lazyDaysAdd() async {
+  static Future<void> lazyDaysAdd() async {
     logger.d("lazy update 실행됨");
     int before = 1;
     String date = DateView.getYesterDate2(before);
@@ -185,12 +189,13 @@ class AnalysisDaily {
 
       //sorting
       days = sorting(days, length);
+      logger.d(days);
 
       if (length != 0) {
         List<FixedAnalysisModel> fixes =
             await AnalysisFixed.readFixedProgress(); //여기서도 날짜바뀜 감지
 
-        last = days[length - 2];
+        last = days[length - 1];
         logger.d("last: $last");
         logger.d("date: $date");
         logger.d(last == date);
@@ -225,27 +230,28 @@ class AnalysisDaily {
 
     // 날짜별로 루프돌기
   }
-  static List<String> sorting(List<String> list, int length){
+
+  static List<String> sorting(List<String> list, int length) {
     List<int> listInt = [];
 
-    for(String str in list){
+    for (String str in list) {
       listInt.add(int.parse(str));
     }
 
-    for(int i=1; i<=length-1; i++ ){
+    for (int i = 1; i <= length - 1; i++) {
       int key = listInt[i];
-      int j = i-1;
+      int j = i - 1;
 
-      while(j>=0 && listInt[j]>key){
-        listInt[j+1] = listInt[j];
+      while (j >= 0 && listInt[j] > key) {
+        listInt[j + 1] = listInt[j];
         j--;
       }
-      listInt[j+1] = key;
+      listInt[j + 1] = key;
     }
 
     list.clear();
 
-    for(int num in listInt){
+    for (int num in listInt) {
       list.add(num.toString());
     }
 
