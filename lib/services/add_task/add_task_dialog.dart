@@ -134,7 +134,6 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                       await AnalysisAccumulate.updateAnalysisAccumulate(ADD_NEW);
 
                       if(isFixedTask){
-                        await ProfileService.addFixedTaskToProfile(taskModel.todo);
                         await AnalysisFixed.updateAnalysisFixed(taskModel, ADD_NEW);
                       }
                       widget.notifyParent();

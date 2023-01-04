@@ -10,8 +10,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 Random _rnd = Random();
 
 const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-String generateRandomString(int length) => String.fromCharCodes(Iterable.generate(
-    length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+
+String generateRandomString(int length) =>
+    String.fromCharCodes(Iterable.generate(
+        length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
 class TaskModel {
   late String todo;
@@ -21,8 +23,8 @@ class TaskModel {
 
   TaskModel({
     required this.todo,
-    required this.isFixed
-    ,});
+    required this.isFixed,
+  });
 
   TaskModel.fromJson(dynamic json) {
     todo = json['todo'];
@@ -30,7 +32,6 @@ class TaskModel {
     isFixed = json['isFixed'];
     key = json['key'];
   }
-
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -41,22 +42,27 @@ class TaskModel {
     return map;
   }
 
-  TaskModel.fromStringData(String data) :this.fromJson(json.decode(data));
-  TaskModel.fromSnapshot(DocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data()!);
-  TaskModel.fromQuerySnapshot(QueryDocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data());
+  TaskModel.fromStringData(String data) : this.fromJson(json.decode(data));
 
+  TaskModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot)
+      : this.fromJson(snapshot.data()!);
+
+  TaskModel.fromQuerySnapshot(
+      QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
+      : this.fromJson(snapshot.data());
 }
 
 /// todo : "todo"
 class TaskModelForProfile {
   late String todo;
 
-  TaskModelForProfile({required this.todo,});
+  TaskModelForProfile({
+    required this.todo,
+  });
 
   TaskModelForProfile.fromJson(dynamic json) {
     todo = json['todo'];
   }
-
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -64,8 +70,6 @@ class TaskModelForProfile {
     return map;
   }
 
-  TaskModelForProfile.fromStringData(String data) :this.fromJson(json.decode(data));
+  TaskModelForProfile.fromStringData(String data)
+      : this.fromJson(json.decode(data));
 }
-
-
-

@@ -119,10 +119,14 @@ class AnalysisDaily {
       logger.d("errrrr");
       await DTaskService.clearDay();
 
-      List<String> fixes =
-          await ProfileService.readFixedTaskInProfile(); //여기서도 날짜바뀜 감지
-      for (String fixedTask in fixes) {
-        TaskModel taskModel = TaskModel(todo: fixedTask, isFixed: true);
+      List<FixedAnalysisModel> fixes =
+          await AnalysisFixed.readFixedProgress(); //여기서도 날짜바뀜 감지
+      for (FixedAnalysisModel fixedModel in fixes) {
+        //완전 동일한 key를 가진 fixed task 생성
+        TaskModel taskModel = TaskModel(todo: fixedModel.todo, isFixed: true);
+        taskModel.key = fixedModel.key;
+
+        //이젠 다른 키에 접근하는 것이 아니므로 ADD_NEW로 실제 추가생성되진 않음
         await AnalysisFixed.updateAnalysisFixed(taskModel, ADD_NEW);
         await DTaskService.writeTask(taskModel);
         await updateAnalysisDaily(ADD_NEW);
@@ -181,8 +185,8 @@ class AnalysisDaily {
       //sorting print
 
       if (length != 0) {
-        List<String> fixes =
-            await ProfileService.readFixedTaskInProfile(); //여기서도 날짜바뀜 감지
+        List<FixedAnalysisModel> fixes =
+            await AnalysisFixed.readFixedProgress(); //여기서도 날짜바뀜 감지
 
         last = days[length - 2];
         logger.d("last: $last");
@@ -192,9 +196,14 @@ class AnalysisDaily {
           DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(
               date: date, allCounter: fixes.length, doneCounter: 0); //
           await initAnalysisDaily(dailyAnalysisModel);
-          for (String fixedTask in fixes) {
+
+          TaskModel taskModel;
+          for (FixedAnalysisModel fixedTask in fixes) {
+            taskModel = TaskModel(todo: fixedTask.todo, isFixed: true);
+            taskModel.key = fixedTask.key;
+
             await AnalysisFixed.updateAnalysisFixed(
-                fixedTask, MULTIPLE_ADD + fixes.length);
+                taskModel, MULTIPLE_ADD + fixes.length);
           }
           await AnalysisAccumulate.updateAnalysisAccumulate(
               MULTIPLE_ADD + fixes.length);

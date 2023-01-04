@@ -175,7 +175,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                       await AnalysisAccumulate.updateAnalysisAccumulate(DELETE_DO + ((fOn[index])?1:0));
 
                                       await AnalysisFixed.deleteAnalysisFixed(fTodo[index].key);
-                                      await ProfileService.deleteFixedTaskToProfile(TaskModelForProfile(todo: fTodo[index].todo));
 
                                       await DTaskService.deleteTask(fTodo[index].key);
                                       setState((){});
