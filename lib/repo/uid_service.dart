@@ -25,8 +25,6 @@ class UidService{
       // 파일 읽기
       String uid = await file.readAsString();
 
-      logger.d(file.path);
-
       return uid;
     } catch (e) {
       return "not found";

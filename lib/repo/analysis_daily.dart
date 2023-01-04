@@ -116,7 +116,7 @@ class AnalysisDaily {
 
       return progress;
     } catch (e) {
-      logger.d("errrrr");
+      logger.d("clear day...");
       await DTaskService.clearDay();
 
       List<FixedAnalysisModel> fixes =

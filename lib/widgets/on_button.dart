@@ -25,7 +25,7 @@ class _OnButtonState extends State<OnButton> {
             widget.stuff,
             style: const TextStyle(
                 color: Colors.white,
-                fontSize: 21,
+                fontSize: 19,
                 fontFamily: "Jua"
             ),
           ),

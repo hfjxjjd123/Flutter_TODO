@@ -89,10 +89,7 @@ class ListFixedTaskProgress extends StatelessWidget {
                         child: Center(
                           child: Text(task3[index],
                             overflow: TextOverflow.ellipsis,
-                            style: Theme
-                              .of(context)
-                              .textTheme
-                              .headline4,),
+                            style: Theme.of(context).textTheme.headline4,),
                         ),
                       ),
                       Container(
