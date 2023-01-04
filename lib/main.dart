@@ -7,7 +7,6 @@ import 'package:secare/router/location.dart';
 import 'package:secare/screens/day_screen.dart';
 import 'package:secare/screens/splash_screen.dart';
 import 'package:beamer/beamer.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:secare/test/test_screen.dart';
 import '../const/size.dart';
 import 'const/home_directory.dart';
@@ -47,9 +46,7 @@ class SelfCareApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: Firebase.initializeApp(),
-        builder: (context, snapshot) {
+
           return FutureBuilder<List<String>>(
             future: Future.wait(
                 [GetHomedir.getHome(), UidService.readDeviceInfo(), SplashTimeService.delay()]),
@@ -72,14 +69,7 @@ class SelfCareApp extends StatelessWidget {
                 return const SplashScreen();
               }
             },
-            // future: Future.delayed(Duration(milliseconds: 500),()=>100),
-            //   builder: (context, snapshot){
-            //   if(snapshot.hasData){
-            //     return MyApp();
-            //   } else return SplashScreen();
-            //   },
           );
-        });
   }
 }
 

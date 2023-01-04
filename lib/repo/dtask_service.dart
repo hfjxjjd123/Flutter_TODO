@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:secare/const/home_directory.dart';
 import 'package:secare/repo/analysis_daily.dart';
 import 'package:secare/repo/analysis_fixed.dart';

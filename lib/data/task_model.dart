@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 /// todo : "todo"
 /// isDone : "isDone"
 /// isFixed : "isFixed"
@@ -43,13 +41,6 @@ class TaskModel {
   }
 
   TaskModel.fromStringData(String data) : this.fromJson(json.decode(data));
-
-  TaskModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot)
-      : this.fromJson(snapshot.data()!);
-
-  TaskModel.fromQuerySnapshot(
-      QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : this.fromJson(snapshot.data());
 }
 
 /// todo : "todo"
