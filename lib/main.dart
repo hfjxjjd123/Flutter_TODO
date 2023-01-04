@@ -1,14 +1,11 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:secare/repo/get_homedir.dart';
 import 'package:secare/repo/splash_time_service.dart';
 import 'package:secare/repo/uid_service.dart';
 import 'package:secare/router/location.dart';
-import 'package:secare/screens/day_screen.dart';
 import 'package:secare/screens/splash_screen.dart';
 import 'package:beamer/beamer.dart';
 import 'package:secare/test/test_screen.dart';
-import '../const/size.dart';
 import 'const/home_directory.dart';
 import 'const/mid.dart';
 
