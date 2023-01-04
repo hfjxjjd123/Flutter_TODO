@@ -182,7 +182,9 @@ class AnalysisDaily {
       }
 
       print(days);
-      //sorting print
+
+      //sorting
+      days = sorting(days, length);
 
       if (length != 0) {
         List<FixedAnalysisModel> fixes =
@@ -222,5 +224,31 @@ class AnalysisDaily {
     //전체리스트업 부분.
 
     // 날짜별로 루프돌기
+  }
+  static List<String> sorting(List<String> list, int length){
+    List<int> listInt = [];
+
+    for(String str in list){
+      listInt.add(int.parse(str));
+    }
+
+    for(int i=1; i<=length-1; i++ ){
+      int key = listInt[i];
+      int j = i-1;
+
+      while(j>=0 && listInt[j]>key){
+        listInt[j+1] = listInt[j];
+        j--;
+      }
+      listInt[j+1] = key;
+    }
+
+    list.clear();
+
+    for(int num in listInt){
+      list.add(num.toString());
+    }
+
+    return list;
   }
 }
