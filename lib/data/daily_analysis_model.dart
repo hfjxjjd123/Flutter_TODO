@@ -32,7 +32,5 @@ class DailyAnalysisModel {
   }
 
   DailyAnalysisModel.fromStringData(String data) :this.fromJson(json.decode(data));
-  DailyAnalysisModel.fromSnapshot(DocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data());
-  DailyAnalysisModel.fromQuerySnapshot(QueryDocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data());
 
 }

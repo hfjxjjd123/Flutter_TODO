@@ -2,6 +2,7 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:secare/const/colors.dart';
+import 'package:secare/repo/analysis_daily.dart';
 import 'package:secare/repo/analysis_fixed.dart';
 import 'package:secare/repo/analysis_service_fixed.dart';
 import 'package:secare/repo/dtask_service.dart';
@@ -170,7 +171,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                 children: [
                                   SlidableAction(
                                     onPressed: (context)async{
-                                      await AnalysisServiceDaily.updateAnalysisDaily(DELETE_DO + ((fOn[index])?1:0));
+                                      await AnalysisDaily.updateAnalysisDaily(DELETE_DO + ((fOn[index])?1:0));
                                       await AnalysisAccumulate.updateAnalysisAccumulate(DELETE_DO + ((fOn[index])?1:0));
 
                                       await AnalysisFixed.deleteAnalysisFixed(fTodo[index].key);

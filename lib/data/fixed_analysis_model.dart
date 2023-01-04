@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 /// allCounter : "allCounter"
 /// doneCounter : "doneCounter"
 /// todo : "todo"
@@ -30,7 +28,5 @@ class FixedAnalysisModel {
     return map;
   }
 
-  FixedAnalysisModel.fromSnapshot(DocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data()!);
-  FixedAnalysisModel.fromQuerySnapshot(QueryDocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data());
   FixedAnalysisModel.fromStringData(String data) :this.fromJson(json.decode(data));
 }

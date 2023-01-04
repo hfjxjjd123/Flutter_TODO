@@ -56,7 +56,7 @@ class DayScreenState extends State<DayScreen> {
     List<bool> fOn = [];
     List<bool> dOn = [];
 
-    AnalysisServiceDaily.readDailyProgress();
+    AnalysisDaily.readDailyProgress();
 
     return SafeArea(
       child: Scaffold(

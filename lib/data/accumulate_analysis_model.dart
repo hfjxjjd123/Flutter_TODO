@@ -24,7 +24,5 @@ class AccumulateAnalysisModel {
   }
 
   AccumulateAnalysisModel.fromStringData(String data) :this.fromJson(json.decode(data));
-  AccumulateAnalysisModel.fromSnapshot(DocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data()!);
-  AccumulateAnalysisModel.fromQuerySnapshot(QueryDocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data());
 
 }

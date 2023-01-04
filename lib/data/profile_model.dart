@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 /// name : "name"
 /// job : "job"
 
@@ -28,8 +26,5 @@ class ProfileModel {
   }
 
   ProfileModel.fromStringData(String data) :this.fromJson(json.decode(data));
-  ProfileModel.fromSnapshot(DocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data()!);
-  ProfileModel.fromQuerySnapshot(QueryDocumentSnapshot<Map<String,dynamic>> snapshot) :this.fromJson(snapshot.data());
-
 }
 
