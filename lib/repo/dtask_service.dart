@@ -48,6 +48,17 @@ class DTaskService{
 
   }
 
+  static Future<File> updateTaskTodo(TaskModel taskModel, String todo) async{
+
+    final path = await _localDirPath;
+    File file = File('$path/${taskModel.key}.txt');
+
+    taskModel.todo = todo;
+
+    return file.writeAsString(json.encode(taskModel.toJson()));
+
+  }
+
   //중복체크 수정요망
 
 //수정과 생성을 나누면?//수정은 바뀐 onCOunt값을?

@@ -82,6 +82,27 @@ class AnalysisFixed {
     }
   }
 
+  static Future<File> updateTaskTodo(TaskModel taskModel, String todo) async{
+
+    try {
+      final path = await _localDirPath;
+      File file = File('$path/${taskModel.key}.txt');
+
+      // 데이터모델 읽어옴
+      FixedAnalysisModel fixedAnalysisModel =
+      FixedAnalysisModel.fromStringData(await file.readAsString());
+
+      fixedAnalysisModel.todo = todo;
+
+      //데이터모델 쓰기
+      return file.writeAsString(json.encode(fixedAnalysisModel.toJson()));
+
+    } catch (e) {
+      logger.d("serious err");
+      return File("");
+    }
+  }
+
   static Future<List<FixedAnalysisModel>> readFixedProgress() async {
     List<FixedAnalysisModel> fixes = [];
     List files = [];
