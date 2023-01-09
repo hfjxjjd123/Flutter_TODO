@@ -50,9 +50,6 @@ class DayScreenState extends State<DayScreen> {
     List<bool> fOn = [];
     List<bool> dOn = [];
 
-    //여기서 clearDays 결정!
-    AnalysisDaily.checkDayChange();
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: offColor,

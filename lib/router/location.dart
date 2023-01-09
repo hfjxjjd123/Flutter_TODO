@@ -1,7 +1,9 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:secare/repo/analysis_daily.dart';
 import 'package:secare/screens/day_screen.dart';
 import 'package:secare/services/profile/screen_profile_edit.dart';
+import 'package:secare/test/test_screen.dart';
 
 import '../const/size.dart';
 import '../screens/profile_screen.dart';
@@ -13,7 +15,16 @@ class DayLocation extends BeamLocation{
 
     return [
       BeamPage(
-          child: DayScreen(),
+          child: FutureBuilder<bool>(
+            future: AnalysisDaily.checkDayChange(),
+            builder: (context, snapshot) {
+              if(snapshot.hasData){
+                return DayScreen();
+              }else{
+                return Container();
+              }
+            }
+          ),
           key: const ValueKey('day')
       ),
     ];
