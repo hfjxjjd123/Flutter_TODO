@@ -5,6 +5,7 @@ import 'package:secare/const/colors.dart';
 import 'package:secare/repo/analysis_daily.dart';
 import 'package:secare/repo/analysis_fixed.dart';
 import 'package:secare/repo/dtask_service.dart';
+import 'package:secare/services/add_task/edit_task_dialog.dart';
 import 'package:secare/services/onlyone.dart';
 
 import '../../const/fetching_analysis_flag.dart';
@@ -23,8 +24,21 @@ class ProfileEditScreen extends StatefulWidget {
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
   TextEditingController _nameEditingController = TextEditingController();
-
   TextEditingController _jobEditingController = TextEditingController();
+
+  late Future<List<TaskModel>> myFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    myFuture = DTaskService.readTasks();
+  }
+
+  void refresh() {
+    setState((){
+      myFuture = DTaskService.readTasks();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +160,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 Expanded(
                   // List<int> items = List<int>.generate(100, (int index) => index);
                   child: FutureBuilder<List<TaskModel>>(
-                    future: DTaskService.readTasks(),
+                    future: myFuture,
                     builder: (context, snapshot) {
                       if(snapshot.hasData){
                         List<TaskModel> fTodo = [];
@@ -183,7 +197,14 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                     ),
                                     SlidableAction(
                                       onPressed: (context){
+                                        showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
 
+                                          builder: (BuildContext context){
+                                            return EditTaskDialog(notifyParent: refresh, taskModel: fTodo[index]);
+                                          },
+                                        );
                                       },
                                       backgroundColor: offColor,
                                       icon: Icons.edit,
