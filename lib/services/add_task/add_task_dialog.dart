@@ -4,9 +4,6 @@ import 'package:secare/const/fetching_analysis_flag.dart';
 import 'package:secare/const/size.dart';
 import 'package:secare/repo/analysis_daily.dart';
 import 'package:secare/repo/analysis_fixed.dart';
-import 'package:secare/repo/analysis_service_daily.dart';
-import 'package:secare/repo/analysis_service_fixed.dart';
-import 'package:secare/repo/profile_service.dart';
 
 import '../../data/task_model.dart';
 import '../../repo/analysis_accumulate.dart';
@@ -121,23 +118,25 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                   Expanded(child: Container()),
                   InkWell(
                     onTap: () async {
-                      _isUploading = true;
-                      setState((){});
+                      if(_textEditingController.text.isNotEmpty){
+                        _isUploading = true;
+                        setState((){});
 
-                      TaskModel taskModel = TaskModel(
-                        todo: _textEditingController.text,
-                        isFixed: isFixedTask,
-                      );
+                        TaskModel taskModel = TaskModel(
+                          todo: _textEditingController.text,
+                          isFixed: isFixedTask,
+                        );
 
-                      await DTaskService.writeTask(taskModel);
-                      await AnalysisDaily.updateAnalysisDaily(ADD_NEW);
-                      await AnalysisAccumulate.updateAnalysisAccumulate(ADD_NEW);
+                        await DTaskService.writeTask(taskModel);
+                        await AnalysisDaily.updateAnalysisDaily(ADD_NEW);
+                        await AnalysisAccumulate.updateAnalysisAccumulate(ADD_NEW);
 
-                      if(isFixedTask){
-                        await AnalysisFixed.updateAnalysisFixed(taskModel, ADD_NEW);
+                        if(isFixedTask){
+                          await AnalysisFixed.updateAnalysisFixed(taskModel, ADD_NEW);
+                        }
+                        widget.notifyParent();
+                        Navigator.pop(context);
                       }
-                      widget.notifyParent();
-                      Navigator.pop(context);
                     },
                     highlightColor: Colors.white70,
                     child: Padding(

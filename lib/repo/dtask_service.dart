@@ -4,10 +4,8 @@ import 'dart:io';
 import 'package:secare/const/home_directory.dart';
 import 'package:secare/repo/analysis_daily.dart';
 import 'package:secare/repo/analysis_fixed.dart';
-import 'package:secare/repo/analysis_service_daily.dart';
 import 'package:secare/repo/create_directory.dart';
 import 'package:secare/test/test_screen.dart';
-import '../const/mid.dart';
 import '../data/task_model.dart';
 import 'analysis_accumulate.dart';
 
@@ -88,7 +86,7 @@ class DTaskService{
       return 0;
     }
     catch(e){
-      logger.d("this would not been done");
+      logger.d("delete task err");
       return -1;
     }
   } // test this code in home
@@ -100,7 +98,7 @@ class DTaskService{
       dir.deleteSync(recursive: true);
     }
     catch(e){
-      logger.d("this would not been done");
+      logger.d("clear days err");
     }
   }
 

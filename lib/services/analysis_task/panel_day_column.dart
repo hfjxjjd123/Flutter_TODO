@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:secare/data/task_model.dart';
+import 'package:secare/services/onlyone.dart';
 import 'package:secare/test/test_screen.dart';
 
 import '../../const/colors.dart';
@@ -33,6 +34,7 @@ class DayColumn extends StatefulWidget {
   List<bool> dOn;
 
   double progress =0.0;
+
 
   @override
   State<DayColumn> createState() => _DayColumnState();
@@ -74,12 +76,6 @@ class _DayColumnState extends State<DayColumn> {
           animatedDuration: const Duration(milliseconds: 150),
           direction: Axis.horizontal,
         ),
-       //  LinearProgressIndicator(
-       //    color: fadeColor,
-       //    backgroundColor: Colors.transparent,
-       //    value: (widget.onList.length > 3)?onCount/allCount:0.0,
-       //    minHeight: 8,
-       // ),
         columnBigPadding(),
         DateView(),
         columnSmallPadding(),
@@ -92,41 +88,44 @@ class _DayColumnState extends State<DayColumn> {
         ),
         columnSmallPadding(),
         Expanded(
-          child: ListView.builder(
-            itemCount: (widget.allStuffs.length),
-            itemBuilder: (BuildContext context, int index) {
-              return InkWell(
-                child: Stack(
-                    children: [
-                      Container(color:(widget.onList[index])?onColor:offColor,child: widget.allStuffs[index],),
-                      Positioned(
-                        child: Icon(
-                          Icons.check_circle,
-                          color: (widget.onList[index])?Colors.white:Colors.transparent,
-                          size: buttonHeight*0.5,
-                        ),
-                        top: buttonHeight*0.25,
-                        left: buttonHeight*0.3,
-                      )
-                    ]
-                ),
-                onTap: ()async{
-                  if(index<widget.fOn.length){
-                    setState((){
-                      widget.onList[index] = !widget.onList[index];
-                      widget.fOn[index] = !widget.fOn[index];
-                    });
-                    await DTaskService.updateTaskDone(widget.fTodo[index]);
-                  }else if(index>widget.fOn.length+2){
-                    setState((){
-                      widget.onList[index] = !widget.onList[index];
-                      widget.dOn[index-widget.fOn.length-3] = !widget.dOn[index-widget.fOn.length-3];
-                    });
-                    await DTaskService.updateTaskDone(widget.dTodo[index-widget.fTodo.length-3]);
-                  }
-                },
-              );
-            },
+          child: OnlyOnePointerRecognizerWidget(
+            child: ListView.builder(
+              itemCount: (widget.allStuffs.length),
+              itemBuilder: (BuildContext context, int index) {
+                return InkWell(
+                  child: Stack(
+                      children: [
+                        Container(color:(widget.onList[index])?onColor:offColor,child: widget.allStuffs[index],),
+                        Positioned(
+                          child: Icon(
+                            Icons.check_circle,
+                            color: (widget.onList[index])?Colors.white:Colors.transparent,
+                            size: buttonHeight*0.5,
+                          ),
+                          top: buttonHeight*0.25,
+                          left: buttonHeight*0.3,
+                        )
+                      ]
+                  ),
+                  onTap: ()async{
+                    if(index<widget.fOn.length){
+                      setState((){
+                        widget.onList[index] = !widget.onList[index];
+                        widget.fOn[index] = !widget.fOn[index];
+                      });
+                      await DTaskService.updateTaskDone(widget.fTodo[index]);
+
+                    }else if(index>widget.fOn.length+2){
+                      setState((){
+                        widget.onList[index] = !widget.onList[index];
+                        widget.dOn[index-widget.fOn.length-3] = !widget.dOn[index-widget.fOn.length-3];
+                      });
+                      await DTaskService.updateTaskDone(widget.dTodo[index-widget.fTodo.length-3]);
+                    }
+                  },
+                );
+              },
+            ),
           ),
         ),
       ],

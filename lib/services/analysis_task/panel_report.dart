@@ -1,12 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:secare/data/daily_analysis_model.dart';
 import 'package:secare/repo/analysis_daily.dart';
 import 'package:secare/test/test_screen.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../const/size.dart';
-import '../../repo/analysis_service_daily.dart';
 import 'panel_daily_chartboard.dart';
 import 'panel_weekly_chartboard.dart';
 
@@ -22,7 +19,20 @@ class PanelReport extends StatelessWidget {
       future: AnalysisDaily.readDaysProgress(),
       builder: (context, snapshot) {
         if(snapshot.hasData) {
+
           int snapshotLength = snapshot.data!.length;
+
+          //sorting
+          for (int i = 1; i <= snapshotLength - 1; i++) {
+            DailyAnalysisModel key = snapshot.data![i];
+            int j = i - 1;
+
+            while (j >= 0 &&  key.date.compareTo(snapshot.data![j].date) < 0) {
+              snapshot.data![j + 1] = snapshot.data![j];
+              j--;
+            }
+            snapshot.data![j + 1] = key;
+          }
 
           tmpIn = List<double>.filled(35, 0);
           double progress = 0.0;

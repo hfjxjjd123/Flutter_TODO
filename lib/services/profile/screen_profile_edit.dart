@@ -4,16 +4,14 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:secare/const/colors.dart';
 import 'package:secare/repo/analysis_daily.dart';
 import 'package:secare/repo/analysis_fixed.dart';
-import 'package:secare/repo/analysis_service_fixed.dart';
 import 'package:secare/repo/dtask_service.dart';
-import 'package:secare/repo/profile_service.dart';
+import 'package:secare/services/onlyone.dart';
 
 import '../../const/fetching_analysis_flag.dart';
 import '../../const/size.dart';
 import '../../data/profile_model.dart';
 import '../../data/task_model.dart';
 import '../../repo/analysis_accumulate.dart';
-import '../../repo/analysis_service_daily.dart';
 import '../../repo/profile_edit_service.dart';
 
 class ProfileEditScreen extends StatefulWidget {
@@ -161,66 +159,68 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           }
                         }
 
-                        return ListView.builder( //StatefulWidget으로 따로 뺀 후 거기서 관리. ValueKey가 뭔지 확인.
-                          itemCount: fTodo.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Slidable(
-                              endActionPane: ActionPane(
-                                extentRatio: 0.3,
-                                motion: ScrollMotion(),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (context)async{
-                                      await AnalysisDaily.updateAnalysisDaily(DELETE_DO + ((fOn[index])?1:0));
-                                      await AnalysisAccumulate.updateAnalysisAccumulate(DELETE_DO + ((fOn[index])?1:0));
+                        return OnlyOnePointerRecognizerWidget(
+                          child: ListView.builder( //StatefulWidget으로 따로 뺀 후 거기서 관리. ValueKey가 뭔지 확인.
+                            itemCount: fTodo.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Slidable(
+                                endActionPane: ActionPane(
+                                  extentRatio: 0.3,
+                                  motion: ScrollMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: (context)async{
+                                        await AnalysisDaily.updateAnalysisDaily(DELETE_DO + ((fOn[index])?1:0));
+                                        await AnalysisAccumulate.updateAnalysisAccumulate(DELETE_DO + ((fOn[index])?1:0));
 
-                                      await AnalysisFixed.deleteAnalysisFixed(fTodo[index].key);
+                                        await AnalysisFixed.deleteAnalysisFixed(fTodo[index].key);
 
-                                      await DTaskService.deleteTask(fTodo[index].key);
-                                      setState((){});
-                                    },
-                                    backgroundColor: Colors.red,
-                                    icon: Icons.delete,
-                                  ),
-                                  SlidableAction(
-                                    onPressed: (context){
+                                        await DTaskService.deleteTask(fTodo[index].key);
+                                        setState((){});
+                                      },
+                                      backgroundColor: Colors.red,
+                                      icon: Icons.delete,
+                                    ),
+                                    SlidableAction(
+                                      onPressed: (context){
 
-                                    },
-                                    backgroundColor: offColor,
-                                    icon: Icons.edit,
-                                  ),
-                                ],
+                                      },
+                                      backgroundColor: offColor,
+                                      icon: Icons.edit,
+                                    ),
+                                  ],
 
-                              ),
-                              child: ListTile(
-                                title: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
-                                  child: Row(
+                                ),
+                                child: ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 0),
+                                    child: Row(
 
-                                    children: [
-                                      Expanded(
-                                        child: Center(
-                                          child: Text(
-                                            fTodo[index].todo,
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontFamily: "SongMyung",
-                                                color: Colors.white
+                                      children: [
+                                        Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              fTodo[index].todo,
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontFamily: "SongMyung",
+                                                  color: Colors.white
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      Container(
-                                        height: 15,
-                                        width: SIZE.width*0.01,
-                                        color: Colors.red,
-                                      )
-                                    ],
+                                        Container(
+                                          height: 15,
+                                          width: SIZE.width*0.01,
+                                          color: Colors.red,
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         );
                       }
                         return Container();

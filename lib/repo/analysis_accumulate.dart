@@ -52,7 +52,7 @@ class AnalysisAccumulate{
       final file = await _localFile;
       String stringData;
       AccumulateAnalysisModel accumulateAnalysisModel;
-      logger.d("Stat: $stat");
+      // logger.d("Stat: $stat");
       try{
         stringData = await file.readAsString();
         accumulateAnalysisModel = AccumulateAnalysisModel.fromStringData(stringData);

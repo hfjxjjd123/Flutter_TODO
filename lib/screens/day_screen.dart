@@ -8,17 +8,12 @@ import 'package:secare/const/fetching_analysis_flag.dart';
 import 'package:secare/const/size.dart';
 import 'package:secare/const/colors.dart';
 import 'package:secare/repo/analysis_daily.dart';
-import 'package:secare/repo/analysis_service_daily.dart';
 import 'package:secare/repo/dtask_service.dart';
-import 'package:secare/repo/profile_service.dart';
 import 'package:secare/services/add_task/add_task_dialog.dart';
 import 'package:secare/services/analysis_task/panel_day_column.dart';
-import 'package:secare/test/test_screen.dart';
 import 'package:secare/widgets/on_button.dart';
-
 import '../data/task_model.dart';
 import '../repo/analysis_accumulate.dart';
-import '../repo/analysis_service_fixed.dart';
 
 class DayScreen extends StatefulWidget {
   DayScreen({Key? key}) : super(key: key);
@@ -55,7 +50,8 @@ class DayScreenState extends State<DayScreen> {
     List<bool> fOn = [];
     List<bool> dOn = [];
 
-    AnalysisDaily.readDailyProgress();
+    //여기서 clearDays 결정!
+    AnalysisDaily.checkDayChange();
 
     return SafeArea(
       child: Scaffold(

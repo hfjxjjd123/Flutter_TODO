@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:secare/const/size.dart';
-import 'package:secare/data/daily_analysis_model.dart';
-import 'package:secare/repo/analysis_service_daily.dart';
-import 'package:secare/test/test_screen.dart';
 import './widget_daily_charts.dart';
-import './widget_daily_progressbar.dart';
 import 'panel_report.dart';
 
 class DailyChartBoard extends StatelessWidget {

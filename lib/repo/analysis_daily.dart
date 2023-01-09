@@ -4,12 +4,10 @@ import 'dart:io';
 import 'package:secare/data/fixed_analysis_model.dart';
 import 'package:secare/repo/analysis_fixed.dart';
 import 'package:secare/repo/dtask_service.dart';
-import 'package:secare/repo/profile_service.dart';
 import 'package:secare/test/test_screen.dart';
 import 'package:secare/widgets/datetime_widget.dart';
 import '../const/fetching_analysis_flag.dart';
 import '../const/home_directory.dart';
-import '../const/mid.dart';
 import '../data/daily_analysis_model.dart';
 import '../data/task_model.dart';
 import 'analysis_accumulate.dart';
@@ -31,12 +29,29 @@ class AnalysisDaily {
     return File('$path/${DateView.getDate2()}.txt');
   }
 
+  static Future<File> localFileForLazy(String date) async {
+    final path = await _localDirPath;
+    return File('$path/$date.txt');
+  }
+
   static Future<File> initAnalysisDaily(
       DailyAnalysisModel dailyAnalysisModel) async {
     //파일 경로
     final file = await _localFile;
     //파일 쓰기
     return file.writeAsString(json.encode(dailyAnalysisModel.toJson()));
+  }
+
+  static Future<File> lazyInitAnalysisDaily(
+      DailyAnalysisModel dailyAnalysisModel, String date) async {
+
+    final file;
+      //파일 경로
+      file = await localFileForLazy(date);
+    //파일 쓰기
+
+    return file.writeAsString(json.encode(dailyAnalysisModel.toJson()));
+
   }
 
   static Future updateAnalysisDaily(int stat) async {
@@ -88,6 +103,7 @@ class AnalysisDaily {
 
       await file.writeAsString(json.encode(dailyAnalysisModel.toJson()));
     } catch (e) {
+      logger.d("LAZY UPDATE IS DONE");
       await lazyDaysAdd();
 
       DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(
@@ -97,8 +113,7 @@ class AnalysisDaily {
     }
   }
 
-  static Future<double> readDailyProgress() async {
-    double progress;
+  static Future<bool> checkDayChange() async {
 
     try {
       final path = await _localFile;
@@ -107,15 +122,8 @@ class AnalysisDaily {
       DailyAnalysisModel dailyAnalysisModel =
           DailyAnalysisModel.fromStringData(await file.readAsString());
 
-      int done = dailyAnalysisModel.doneCounter;
-      int all = dailyAnalysisModel.allCounter;
-      if (all != 0) {
-        progress = done.toDouble() / all.toDouble();
-      } else {
-        progress = 0;
-      }
+      return false;
 
-      return progress;
     } catch (e) {
       logger.d("clear day...");
       await DTaskService.clearDay();
@@ -135,7 +143,7 @@ class AnalysisDaily {
       await AnalysisAccumulate.updateAnalysisAccumulate(
           MULTIPLE_ADD + fixes.length);
 
-      return 0.0;
+      return true;
     }
   }
 
@@ -153,14 +161,18 @@ class AnalysisDaily {
             DailyAnalysisModel.fromStringData(await files[i].readAsString());
         progresses.add(dailyAnalysisModel);
       }
+
     } catch (e) {
       logger.d("errrrorrr");
     }
-
     return progresses;
   }
 
-  static Future<void> lazyDaysAdd() async {
+  static Future<bool> lazyDaysAdd() async {
+
+    //실제로 필요한 상황일 때?
+    bool isLazy = true;
+
     logger.d("lazy update 실행됨");
     int before = 1;
     String date = DateView.getYesterDate2(before);
@@ -196,36 +208,47 @@ class AnalysisDaily {
             await AnalysisFixed.readFixedProgress(); //여기서도 날짜바뀜 감지
 
         last = days[length - 1];
-        logger.d("last: $last");
-        logger.d("date: $date");
-        logger.d(last == date);
-        while (last != date) {
+        logger.d(last == DateView.getDate2());
+        if(last != DateView.getDate2()){
+          logger.d("last: $last");
+          logger.d("date: $date");
+          logger.d(last == date);
+          while (last != date) {
+            DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(
+                date: DateView.getYesterDate(before), allCounter: fixes.length, doneCounter: 0); //
+            await lazyInitAnalysisDaily(dailyAnalysisModel, date);
+
+            TaskModel taskModel;
+            for (FixedAnalysisModel fixedTask in fixes) {
+              taskModel = TaskModel(todo: fixedTask.todo, isFixed: true);
+              taskModel.key = fixedTask.key;
+
+              await AnalysisFixed.updateAnalysisFixed(
+                  taskModel, MULTIPLE_ADD + fixes.length);
+            }
+            await AnalysisAccumulate.updateAnalysisAccumulate(
+                MULTIPLE_ADD + fixes.length);
+            before++;
+            date = DateView.getYesterDate2(before);
+            logger.d(date == last);
+          }
+
           DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(
-              date: date, allCounter: fixes.length, doneCounter: 0); //
+              date: DateView.getDate(), allCounter: length, doneCounter: 0);
           await initAnalysisDaily(dailyAnalysisModel);
 
-          TaskModel taskModel;
-          for (FixedAnalysisModel fixedTask in fixes) {
-            taskModel = TaskModel(todo: fixedTask.todo, isFixed: true);
-            taskModel.key = fixedTask.key;
-
-            await AnalysisFixed.updateAnalysisFixed(
-                taskModel, MULTIPLE_ADD + fixes.length);
-          }
-          await AnalysisAccumulate.updateAnalysisAccumulate(
-              MULTIPLE_ADD + fixes.length);
-          before++;
-          date = DateView.getYesterDate2(before);
-          logger.d(date == last);
+          return isLazy;
+        }else{
+          logger.d("false lazy upload -- ");
+          return false;
         }
+
       }
-      DailyAnalysisModel dailyAnalysisModel = DailyAnalysisModel(
-          date: DateView.getDate(), allCounter: length, doneCounter: 0);
-      await initAnalysisDaily(dailyAnalysisModel);
+
     } catch (e) {
       logger.d("Serious err");
     }
-
+    return false;
     //전체리스트업 부분.
 
     // 날짜별로 루프돌기

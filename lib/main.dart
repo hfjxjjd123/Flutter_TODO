@@ -8,9 +8,14 @@ import 'package:beamer/beamer.dart';
 import 'package:secare/test/test_screen.dart';
 import 'const/home_directory.dart';
 import 'const/mid.dart';
+import 'package:flutter/services.dart';
 
-void main() {
-  runApp(SelfCareApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  runApp(const SelfCareApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -21,7 +26,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'umm',
       theme: ThemeData(
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           headline3:
               TextStyle(color: Colors.white, fontSize: 24, fontFamily: 'Jua'),
           headline4:
@@ -54,11 +59,10 @@ class SelfCareApp extends StatelessWidget {
                 if (snapshot.data![1] != "not found") {
                   MID = snapshot.data![1];
                 } else {
-                  logger.d("User 생성!! // 1번만해야돼");
+                  //User 생성
                   String mid = UidService.createUID();
                   UidService.writeDeviceInfo(mid);
                   MID = mid;
-                  logger.d("created mid = $mid");
                 }
 
                 return const MyApp();
