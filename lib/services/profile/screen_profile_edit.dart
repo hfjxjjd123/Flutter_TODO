@@ -190,7 +190,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                         await AnalysisFixed.deleteAnalysisFixed(fTodo[index].key);
 
                                         await DTaskService.deleteTask(fTodo[index].key);
-                                        setState((){});
+
+                                        refresh();
                                       },
                                       backgroundColor: Colors.red,
                                       icon: Icons.delete,

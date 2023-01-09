@@ -65,7 +65,7 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
                         focusedBorder: const UnderlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.white, width: 2)),
-                        hintText: " 추가할 작업",
+                        hintText: " 변경할 작업",
                         hintStyle: Theme.of(context)
                             .textTheme
                             .headline4!
