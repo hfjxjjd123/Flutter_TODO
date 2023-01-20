@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:secare/const/colors.dart';
 import 'package:secare/const/fetching_analysis_flag.dart';
 import 'package:secare/const/size.dart';
@@ -18,7 +19,7 @@ class AddTaskDialog extends StatefulWidget {
 }
 
 class _AddTaskDialogState extends State<AddTaskDialog> {
-  bool isFixedTask = true;
+  bool isFixedTask = false;
   TextEditingController _textEditingController = TextEditingController();
   bool _isUploading = false;
 
@@ -42,6 +43,11 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                 cursorColor: Colors.white,
                 autofocus: true,
                 style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 20),
+                inputFormatters: [
+                  FilteringTextInputFormatter(RegExp(r"^\s$"),
+                      allow: false,
+                      replacementString: _textEditingController.text)
+                ],
                 decoration: InputDecoration(
                   isDense: true,
                   contentPadding: EdgeInsets.all(1),
@@ -119,11 +125,13 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                   InkWell(
                     onTap: () async {
                       if(_textEditingController.text.isNotEmpty){
+
                         _isUploading = true;
                         setState((){});
 
                         TaskModel taskModel = TaskModel(
-                          todo: _textEditingController.text,
+                          todo: RegExp(r"^\S+((\s*)(\S+))*")
+                              .firstMatch(_textEditingController.text)![0].toString(),
                           isFixed: isFixedTask,
                         );
 

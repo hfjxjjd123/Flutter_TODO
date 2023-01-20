@@ -1,5 +1,6 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:secare/const/colors.dart';
 import 'package:secare/repo/analysis_daily.dart';
@@ -7,6 +8,7 @@ import 'package:secare/repo/analysis_fixed.dart';
 import 'package:secare/repo/dtask_service.dart';
 import 'package:secare/services/add_task/edit_task_dialog.dart';
 import 'package:secare/services/onlyone.dart';
+import 'package:secare/test/test_screen.dart';
 
 import '../../const/fetching_analysis_flag.dart';
 import '../../const/size.dart';
@@ -67,7 +69,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       Expanded(child: Container()),
                       InkWell(
                         onTap: () async {
-                          await ProfileEditService.writeProfile(_nameEditingController.text, _jobEditingController.text);
+                          await ProfileEditService.writeProfile(
+                              (_nameEditingController.text.isNotEmpty)?_nameEditingController.text:"OOO",
+                              (_jobEditingController.text.isNotEmpty)?_jobEditingController.text:"OOO"
+                          );
                           context.beamBack();
                         },
                         highlightColor: Colors.white70,
@@ -95,8 +100,17 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                               SizedBox(
                                 width: SIZE.width*0.7,
                                 child: TextFormField(
+                                  onChanged: (text){
+                                    if(!RegExp(r"^(\S+\s?)*$").hasMatch(text)){
+                                      _nameEditingController.text =
+                                          _nameEditingController.text
+                                              .substring(0, _nameEditingController.text.length - 1);
+                                      _nameEditingController.selection =
+                                          TextSelection.fromPosition(TextPosition(offset: _nameEditingController.text.length));
+                                    }
+                                  },
                                   controller: _nameEditingController,
-                                  maxLength: 4,
+                                  maxLength: 6,
                                   cursorColor: Colors.white,
                                   autofocus: true,
                                   style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18),
@@ -126,6 +140,15 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
                                 width: SIZE.width*0.7,
                                 child: TextFormField(
+                                  onChanged: (text){
+                                    if(!RegExp(r"^(\S+\s?)*$").hasMatch(text)){
+                                      _jobEditingController.text =
+                                          _jobEditingController.text
+                                              .substring(0, _jobEditingController.text.length - 1);
+                                      _jobEditingController.selection =
+                                          TextSelection.fromPosition(TextPosition(offset: _jobEditingController.text.length));
+                                    }
+                                  },
                                   controller: _jobEditingController,
                                   maxLength: 9,
                                   cursorColor: Colors.white,
