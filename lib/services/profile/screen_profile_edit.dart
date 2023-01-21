@@ -178,7 +178,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     }
                 ),
                 Container(height: SIZE.height*0.08,),
-                Text("고정업무관리", style: Theme.of(context).textTheme.headline3,),
+                Text("매일 할 일 관리", style: Theme.of(context).textTheme.headline3,),
                 Container(height: SIZE.height*0.025,),
                 Expanded(
                   // List<int> items = List<int>.generate(100, (int index) => index);
