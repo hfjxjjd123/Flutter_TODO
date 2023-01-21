@@ -82,7 +82,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                     ),
 
                     child: Center(
-                      child: Text("고정업무", style: Theme.of(context).textTheme.headline4,),
+                      child: Text("매일 할 일", style: Theme.of(context).textTheme.headline4,),
                     ),
                   ),
                 ),
@@ -100,7 +100,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                         borderRadius: BorderRadius.circular(5),
                       ),
                     child: Center(
-                      child: Text("일일업무", style: Theme.of(context).textTheme.headline4,),
+                      child: Text("오늘 할 일", style: Theme.of(context).textTheme.headline4,),
                     ),
                   ),
                 ),
