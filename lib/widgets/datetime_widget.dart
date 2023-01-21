@@ -13,34 +13,34 @@ class DateView extends StatelessWidget {
   }
 
   String getToday() {
-    DateTime now = DateTime.now();
+    DateTime now = DateTime.now().subtract(Duration(hours: 3));
     DateFormat formatter = DateFormat('MM. dd');
     var strToday = formatter.format(now);
     return strToday;
   }
 
   static String getDate(){
-    DateTime now = DateTime.now();
+    DateTime now = DateTime.now().subtract(Duration(hours: 3));
     DateFormat formatter = DateFormat('yyyy. MM. dd');
     var strToday = formatter.format(now);
     return strToday;
   }
   static String getDate2(){
-    DateTime now = DateTime.now();
+    DateTime now = DateTime.now().subtract(Duration(hours: 3));
     DateFormat formatter = DateFormat('yyyyMMdd');
     var strToday = formatter.format(now);
     return strToday;
   }
 
   static String getYesterDate(int n){
-    DateTime yes = DateTime.now().subtract(Duration(days: n));
+    DateTime yes = DateTime.now().subtract(Duration(hours: 3)).subtract(Duration(days: n));
     DateFormat formatter = DateFormat('yyyy. MM. dd');
     var strYesterday = formatter.format(yes);
     return strYesterday;
   }
 
   static String getYesterDate2(int n){
-    DateTime yes = DateTime.now().subtract(Duration(days: n));
+    DateTime yes = DateTime.now().subtract(Duration(hours: 3)).subtract(Duration(days: n));
     DateFormat formatter = DateFormat('yyyyMMdd');
     var strYesterday = formatter.format(yes);
     return strYesterday;
