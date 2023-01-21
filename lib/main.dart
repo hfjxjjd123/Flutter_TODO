@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'umm',
       theme: ThemeData(
-        textTheme: const TextTheme(
+        textTheme: TextTheme(
           headline3:
               TextStyle(color: Colors.white, fontSize: 24, fontFamily: 'Jua'),
           headline4:

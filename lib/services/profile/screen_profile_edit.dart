@@ -6,6 +6,7 @@ import 'package:secare/const/colors.dart';
 import 'package:secare/repo/analysis_daily.dart';
 import 'package:secare/repo/analysis_fixed.dart';
 import 'package:secare/repo/dtask_service.dart';
+import 'package:secare/services/add_task/delete_task_dialog.dart';
 import 'package:secare/services/add_task/edit_task_dialog.dart';
 import 'package:secare/services/onlyone.dart';
 import 'package:secare/test/test_screen.dart';
@@ -207,14 +208,23 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                   children: [
                                     SlidableAction(
                                       onPressed: (context)async{
-                                        await AnalysisDaily.updateAnalysisDaily(DELETE_DO + ((fOn[index])?1:0));
-                                        await AnalysisAccumulate.updateAnalysisAccumulate(DELETE_DO + ((fOn[index])?1:0));
 
-                                        await AnalysisFixed.deleteAnalysisFixed(fTodo[index].key);
+                                        showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
 
-                                        await DTaskService.deleteTask(fTodo[index].key);
-
-                                        refresh();
+                                          builder: (BuildContext context){
+                                            return DeleteTaskDialog(notifyParent: refresh,
+                                                taskModel: fTodo[index], isOn: fOn[index]);
+                                          },
+                                        );
+                                        //
+                                        // await AnalysisDaily.updateAnalysisDaily(DELETE_DO + ((fOn[index])?1:0));
+                                        // await AnalysisAccumulate.updateAnalysisAccumulate(DELETE_DO + ((fOn[index])?1:0));
+                                        //
+                                        // await AnalysisFixed.deleteAnalysisFixed(fTodo[index].key);
+                                        //
+                                        // await DTaskService.deleteTask(fTodo[index].key);
                                       },
                                       backgroundColor: Colors.red,
                                       icon: Icons.delete,

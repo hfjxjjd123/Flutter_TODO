@@ -99,7 +99,6 @@ class _EditTaskDialogState extends State<EditTaskDialog> {
                               _isUploading = true;
                               setState(() {});
 
-                              logger.d("change");
                               await DTaskService.updateTaskTodo(widget.taskModel, textEditingController.text);
                               await AnalysisFixed.updateTaskTodo(widget.taskModel, textEditingController.text);
 
