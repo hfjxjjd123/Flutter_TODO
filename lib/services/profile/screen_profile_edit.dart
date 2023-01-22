@@ -110,10 +110,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                           TextSelection.fromPosition(TextPosition(offset: _nameEditingController.text.length));
                                     }
                                   },
+                                  autofocus: false,
                                   controller: _nameEditingController,
                                   maxLength: 6,
                                   cursorColor: Colors.white,
-                                  autofocus: true,
                                   style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18),
                                   decoration: InputDecoration(
                                     isDense: true,
@@ -153,7 +153,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                   controller: _jobEditingController,
                                   maxLength: 9,
                                   cursorColor: Colors.white,
-                                  autofocus: true,
+                                  autofocus: false,
                                   style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 18),
                                   decoration: InputDecoration(
                                     isDense: true,

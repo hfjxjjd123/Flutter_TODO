@@ -34,7 +34,7 @@ class _DeleteTaskDialogState extends State<DeleteTaskDialog> {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20))),
       content: Container(
-        height: SIZE.height * 0.23,
+        height: SIZE.height * 0.20,
         child: (_isDeleting)
             ? Center(
           child: CircularProgressIndicator(

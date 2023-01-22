@@ -127,6 +127,30 @@ class AnalysisFixed {
     return fixes;
   }
 
+  static Future<List<String>> readFTasksTodo() async{
+
+    List files = [];
+    List<String> tasks = [];
+    int length;
+    FixedAnalysisModel fixedAnalysisModel;
+
+    try {
+      String path = await _localDirPath;
+      files = Directory('$path/').listSync();
+      length = files.length;
+
+      for (int i = 0; i < length; i++) {
+        fixedAnalysisModel =
+            FixedAnalysisModel.fromStringData(await files[i].readAsString());
+        tasks.add(fixedAnalysisModel.todo);
+      }
+    }catch (e){
+      logger.d("NO such dir: dtask");
+    }
+
+    return tasks;
+  }
+
   //challenge: String todo -> cannot find dir, what if Model? then cannot use this func
   static Future<int> deleteAnalysisFixed(String key) async {
 

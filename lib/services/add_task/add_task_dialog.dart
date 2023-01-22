@@ -5,6 +5,7 @@ import 'package:secare/const/fetching_analysis_flag.dart';
 import 'package:secare/const/size.dart';
 import 'package:secare/repo/analysis_daily.dart';
 import 'package:secare/repo/analysis_fixed.dart';
+import 'package:secare/test/test_screen.dart';
 
 import '../../data/task_model.dart';
 import '../../repo/analysis_accumulate.dart';
@@ -22,6 +23,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   bool isFixedTask = false;
   TextEditingController _textEditingController = TextEditingController();
   bool _isUploading = false;
+  bool _isAlready = false;
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +108,18 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                 ),
               ],
             ),
-            columnSmallPadding(),
+            Container(height: SIZE.height*0.01,),
+            (_isAlready)?SizedBox(
+              height: SIZE.height*0.02,
+              width: SIZE.width*0.5,
+              child: Center(
+                child: Text(
+                    "* 이미 존재하는 매일 할 일 입니다.",
+                  style: Theme.of(context)
+                      .textTheme.headline6!.copyWith(color: Colors.redAccent),
+                ),
+              ),
+            ):Container(),
             SizedBox(
               width: SIZE.width*0.5,
               child: Row(
@@ -125,25 +138,37 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
                   InkWell(
                     onTap: () async {
                       if(_textEditingController.text.isNotEmpty){
+                        List<String> ftasks;
+                        String todoAdd;
+                        ftasks = await AnalysisFixed.readFTasksTodo();
+                        todoAdd = RegExp(r"^\S+((\s*)(\S+))*")
+                            .firstMatch(_textEditingController.text)![0].toString();
 
-                        _isUploading = true;
-                        setState((){});
+                        if(isFixedTask && ftasks.contains(todoAdd)){
+                          _isAlready = true;
+                          _textEditingController.text = todoAdd;
+                          setState(() {});
+                        }else{
+                          _isUploading = true;
+                          setState((){});
 
-                        TaskModel taskModel = TaskModel(
-                          todo: RegExp(r"^\S+((\s*)(\S+))*")
-                              .firstMatch(_textEditingController.text)![0].toString(),
-                          isFixed: isFixedTask,
-                        );
+                          TaskModel taskModel = TaskModel(
+                            todo: todoAdd,
+                            isFixed: isFixedTask,
+                          );
 
-                        await DTaskService.writeTask(taskModel);
-                        await AnalysisDaily.updateAnalysisDaily(ADD_NEW);
-                        await AnalysisAccumulate.updateAnalysisAccumulate(ADD_NEW);
 
-                        if(isFixedTask){
-                          await AnalysisFixed.updateAnalysisFixed(taskModel, ADD_NEW);
+
+                          await DTaskService.writeTask(taskModel);
+                          await AnalysisDaily.updateAnalysisDaily(ADD_NEW);
+                          await AnalysisAccumulate.updateAnalysisAccumulate(ADD_NEW);
+
+                          if(isFixedTask){
+                            await AnalysisFixed.updateAnalysisFixed(taskModel, ADD_NEW);
+                          }
+                          widget.notifyParent();
+                          Navigator.pop(context);
                         }
-                        widget.notifyParent();
-                        Navigator.pop(context);
                       }
                     },
                     highlightColor: Colors.white70,

@@ -18,8 +18,8 @@ class DailyChartBoard extends StatelessWidget {
         ),
         Positioned(
             child: Text("Today", style: TextStyle(fontSize: 10, fontFamily: 'SongMyung'),),
-          left: SIZE.width*0.755,
-          top: SIZE. height*0.29,
+          left: SIZE.width*0.77,
+          top: SIZE.height*0.29,
         )
       ], 
     );
