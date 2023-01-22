@@ -261,6 +261,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                                   fontFamily: "SongMyung",
                                                   color: Colors.white
                                               ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
                                         ),

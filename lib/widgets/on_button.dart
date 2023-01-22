@@ -20,16 +20,21 @@ class _OnButtonState extends State<OnButton> {
       color: Colors.transparent,
       alignment: Alignment.center,
       height: buttonHeight,
-      child: Center(
-          child: Text(
-            widget.stuff,
-            style: const TextStyle(
-                color: Colors.white,
-                fontSize: 19,
-                fontFamily: "Jua"
+      child: SizedBox(
+        width: SIZE.width*0.6,
+        child: Center(
+            child: Text(
+              widget.stuff,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 19,
+                  fontFamily: "Jua"
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
             ),
           ),
-        ),
+      ),
     );
   }
 }
